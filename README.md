@@ -139,7 +139,7 @@ For bygging i Github Actions trengs følgende secrets:
 Det er også forhånds laget et Elastic Container Repository(ECR) med navn:
 [kandidat2033ecr](https://eu-west-1.console.aws.amazon.com/ecr/repositories/private/244530008913/kandidat2033ecr?region=eu-west-1)
 
-Oppgave 2 - B - Resultat
+##Oppgave 2 - B - Resultat
 [Commit'en har id d14dcab544268b3192fbc74487474159d8d98691](https://github.com/sebastiannordby/DevopsPGR301Exam/commit/d14dcab544268b3192fbc74487474159d8d98691).
 
 Kjøring av workflow:
