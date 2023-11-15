@@ -88,6 +88,16 @@ data "aws_iam_policy_document" "policy" {
     actions = ["cloudwatch:*"]
     resources = ["*"]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability"
+    ]
+    resources = ["arn:aws:ecr:eu-west-1:244530008913:repository/seno005-private"]
+  }
 }
 
 resource "aws_iam_policy" "policy" {
