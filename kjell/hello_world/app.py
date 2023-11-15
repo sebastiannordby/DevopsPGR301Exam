@@ -41,3 +41,5 @@ def lambda_handler(event, context):
         },
         "body": json.dumps(rekognition_results),
     }
+
+print(lambda_handler(None, None))
