@@ -2,22 +2,21 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Tool For S3 AWS Bucket Quering
 
-Globals:
-  Function:
-    Timeout: 60
-    MemorySize: 512
-
 Resources:
+  ImageS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: kandidat2033b
+
   HelloWorldFunction:
     Type: AWS::Serverless::Function 
     Properties:
       CodeUri: hello_world/
       Handler: app.lambda_handler
       Runtime: python3.9
-      Architectures:
-        - x86_64
-      Policies:
-        - AmazonRekognitionFullAccess
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref ImageS3Bucket
       Events:
         HelloWorld:
           Type: Api 
@@ -35,3 +34,6 @@ Outputs:
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn
+  S3BucketName:
+    Description: "S3 Image Bucket Name"
+    Value: !Ref ImageS3Bucket

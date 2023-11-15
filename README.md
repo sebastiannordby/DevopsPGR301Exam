@@ -20,3 +20,12 @@ except KeyError:
     raise ValueError("The environment variable <BUCKET_NAME> must be provided.")
 ****** 
 ```
+
+Gjort om så SAM kan bruke S3 bøtten som er beskrevet i "template-yml":
+```
+******
+Environment:
+    Variables:
+        BUCKET_NAME: !Ref ImageS3Bucket
+******      
+```
