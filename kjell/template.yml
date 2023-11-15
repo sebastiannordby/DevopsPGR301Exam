@@ -14,12 +14,13 @@ Resources:
       CodeUri: hello_world/
       Handler: app.lambda_handler
       Runtime: python3.9
-      Policies:
-        - S3ReadPolicy: 
-            BucketName: !Ref ImageS3Bucket
       Environment:
         Variables:
           BUCKET_NAME: !Ref ImageS3Bucket
+      Policies:
+        - AmazonRekognitionFullAccess 
+        - S3ReadPolicy: 
+            BucketName: !Ref ImageS3Bucket
       Events:
         HelloWorld:
           Type: Api 
