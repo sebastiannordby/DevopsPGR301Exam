@@ -56,3 +56,29 @@ HelloWorldFunction:
 ## Oppgave 1 - A - Resultat:
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/f004132d-ad6b-4738-b68f-1026e86e0965)
 
+## Oppgave 1 - B
+Dockerfilen jeg skrev later til å fungere og begge kommandoer oppgitt i oppgaven kjører, som vist i resultat.
+Slik ser den ut:
+
+```
+FROM python:3.9-slim
+
+# Sett arbeidskatalogen i containeren
+WORKDIR /app
+
+# Kopier filene som kreves for å installere avhengighetene
+COPY requirements.txt ./
+
+# Installer eventuelle nødvendige pakker spesifisert i requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Kopier resten av applikasjonens kildekode til arbeidskatalogen i containeren
+COPY . .
+
+CMD ["python", "./app.py"]
+```
+
+## Oppgave 1 - B - Resultat
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/8352b4d9-ba36-476b-9f10-0fac3805b887)
+
+
