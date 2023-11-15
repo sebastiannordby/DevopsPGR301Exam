@@ -1,10 +1,10 @@
 variable "apprunner_service_name" {
-  description = "Name of the AppRunner service"
+  description = "Name of the AppRunner Service"
   type = string
 }
 
 variable "ecr_repository" {
-  description = "URI to ECR repository"
+  description = "ECR URI"
   type = string
 }
 
@@ -19,7 +19,7 @@ variable "apprunner_policy_name" {
 }
 
 variable "apprunner_container_port" {
-  description = "Container port number"
+  description = "AppRunner Instance Port Number"
   type = number
   default = 8080
 }
