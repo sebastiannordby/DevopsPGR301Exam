@@ -57,8 +57,8 @@ HelloWorldFunction:
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/17a20dd2-42dc-4771-b226-3ec510960d91)
 
 ## Oppgave 1 - B
-Dockerfilen jeg skrev later til å fungere og begge kommandoer oppgitt i oppgaven kjører, som vist i resultat.
-Slik ser den ut:
+Docker-filen jeg skrev later til å fungere og begge kommandoer oppgitt i oppgaven kjører, som vist i resultat.
+Slik ser Docker-filen ut:
 
 ```
 FROM python:3.9-slim
@@ -81,4 +81,51 @@ CMD ["python", "./app.py"]
 ## Oppgave 1 - B - Resultat
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/8352b4d9-ba36-476b-9f10-0fac3805b887)
 
+# Oppgave 2
+
+## Oppgave 2 - A
+Dockerfile'n later til å fungere og begge kommandoer oppgitt i oppgaven kjører, som vist i resultat.
+Slik ser Docker-filen ut:
+```
+# Stage 1: Bygg
+# Bruker Maven-bilde for å bygge applikasjonen
+FROM maven:3.6.3-jdk-11-slim AS build
+WORKDIR /app
+
+# Kopier Maven-konfigurasjonsfiler
+COPY pom.xml .
+
+# Last ned alle avhengigheter
+RUN mvn dependency:go-offline
+
+# Kopier kildekoden til bildet
+COPY src /app/src
+
+# Bygg applikasjonen
+RUN mvn package -DskipTests
+
+# Stage 2: Kjøring
+FROM openjdk:11-jre-slim
+WORKDIR /app
+
+# Kopier den bygde applikasjonen fra Stage 1
+COPY --from=build /app/target/*.jar app.jar
+
+# Sett standard kommando for containeren
+CMD ["java", "-jar", "app.jar"]
+```
+
+##Oppgave 2 - A - Resultat
+Kjøring av "docker build -t ppe .":
+
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/b857fa6e-9e8e-42f4-a105-ca806339d809)
+
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/13bb2811-3069-4108-9e4c-8540702d765d)
+
+Kjøring av "docker run -p 8080:8080 -e AWS_ACCESS_KEY_ID=XXX -e AWS_SECRET_ACCESS_KEY=YYY -e BUCKET_NAME=kjellsimagebucket ppe":
+
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/24848cef-807f-4c2a-9745-ed74e2df7421)
+
+Kjøring av "curl localhost:8080/scan-ppe?bucketName=kjellsimagebucket":
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/e59893f2-9afa-42c8-b88a-8a0abeda427d)
 
