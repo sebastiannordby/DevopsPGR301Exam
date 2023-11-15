@@ -1,12 +1,6 @@
 name: Publish Python AWS SAM
 
-on: 
-  push:
-    branches:
-      - main
-    paths:
-        - 'kjell/**' 
-  workflow_dispatch:
+on: [main, workflow_dispatch]
 
 jobs:
   deploy:
@@ -31,5 +25,6 @@ jobs:
       working-directory: ./kjell
 
     - name: Deploy SAM application
+      if: github.ref == 'refs/heads/main'
       run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name kandidat2033 --capabilities CAPABILITY_IAM --resolve-s3
       working-directory: ./kjell

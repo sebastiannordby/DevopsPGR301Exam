@@ -129,3 +129,13 @@ Kjøring av "docker run -p 8080:8080 -e AWS_ACCESS_KEY_ID=XXX -e AWS_SECRET_ACCE
 Kjøring av "curl localhost:8080/scan-ppe?bucketName=kjellsimagebucket":
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/e59893f2-9afa-42c8-b88a-8a0abeda427d)
 
+## Oppgave 2 - B
+
+For bygging i Github Actions trengs følgende secrets:
+- AWS_ACCESS_KEY_ID (Lages i IAM)
+- AWS_SECRET_ACCESS_KEY (Lages i IAM)
+
+Det er også forhånds laget et Elastic Container Repository(ECR) med navn:
+[kandidat2033ecr](https://eu-west-1.console.aws.amazon.com/ecr/repositories/private/244530008913/kandidat2033ecr?region=eu-west-1)
+
+
