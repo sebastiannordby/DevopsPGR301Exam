@@ -149,6 +149,9 @@ Publisert til ECR og tagget med "latest" og hash for commit:
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/6f5ef3fb-64a1-4f02-9196-aec3ffb77efb)
 
 # Oppgave 3
+For bygging i Github Actions trengs følgende secrets:
+- AWS_ACCESS_KEY_ID (Lages i IAM)
+- AWS_SECRET_ACCESS_KEY (Lages i IAM)
 
 ## Oppgave 3 - A
 Endte opp med å gjøre om fire hardkodet felter til variabler:
@@ -190,5 +193,56 @@ instance_configuration {
     cpu = 256
     memory = 1024
 }
+*****
+```
+
+## Oppgave 3 - B
+Har utvidet workflow fil til å kjøre Terraform:
+
+```
+  terraform-deploy:
+    needs: [build-and-push-ecr] 
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: eu-west-1
+    
+      - name: Terraform Init
+        working-directory: ./infra
+        run: terraform init
+
+      - name: Terraform Apply
+        working-directory: ./infra
+        run: terraform apply -auto-approve -input=false
+        env:
+          TF_LOG: DEBUG
+          TF_VAR_iam_policy_name: kandidat2033polly
+          TF_VAR_ecr_repository_uri: 244530008913.dkr.ecr.eu-west-1.amazonaws.com/seno005-private
+          TF_VAR_apprunner_container_port: 8080
+          TF_VAR_apprunner_service_name: kandidat2033apprunr
+          TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
+```
+
+I siste steg("Terraform Apply") i jobben får Terraform variablene verdier:
+
+```
+*****
+TF_LOG: DEBUG
+TF_VAR_iam_policy_name: kandidat2033polly
+TF_VAR_ecr_repository_uri: 244530008913.dkr.ecr.eu-west-1.amazonaws.com/seno005-private
+TF_VAR_apprunner_container_port: 8080
+TF_VAR_apprunner_service_name: kandidat2033apprunr
+TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
 *****
 ```
