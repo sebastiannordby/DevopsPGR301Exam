@@ -21,6 +21,8 @@ Resources:
         - AmazonRekognitionFullAccess 
         - S3ReadPolicy: 
             BucketName: !Ref ImageS3Bucket
+      Architectures:
+        - x86_64
       Events:
         HelloWorld:
           Type: Api 
