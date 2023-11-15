@@ -21,11 +21,22 @@ except KeyError:
 ****** 
 ```
 
-Gjort om så SAM kan bruke S3 bøtten som er beskrevet i "template-yml":
+Gjort om så SAM kan bruke S3 bøtten som er beskrevet i "template.yml":
 ```
 ******
 Environment:
     Variables:
         BUCKET_NAME: !Ref ImageS3Bucket
+******      
+```
+
+Fikk publisert til Sam, men fikk en "Internal Server Error", gikk så til CloudWatch for å se om jeg fant noen logg, og det gjorde jeg.. Jeg glemte jo å gi tilgang til S3 bøtten med bilder.
+Så jeg la til det i policies for funksjonen :
+```
+******      
+Policies:
+    - AmazonRekognitionFullAccess 
+    - S3ReadPolicy: 
+        BucketName: !Ref ImageS3Bucket
 ******      
 ```
