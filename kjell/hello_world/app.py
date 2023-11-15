@@ -36,7 +36,10 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": 200,
-        "body":  json.dumps(rekognition_results),
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": json.dumps(rekognition_results),
     }
 
 print(lambda_handler(None, None))
