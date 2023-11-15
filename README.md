@@ -148,4 +148,47 @@ Kjøring av workflow:
 Publisert til ECR og tagget med "latest" og hash for commit:
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/6f5ef3fb-64a1-4f02-9196-aec3ffb77efb)
 
+# Oppgave 3
 
+## Oppgave 3 - A
+Endte opp med å gjøre om fire hardkodet felter til variabler:
+
+```
+variable "apprunner_service_name" {
+  description = "Name of the AppRunner service"
+  type = string
+}
+
+variable "ecr_repository" {
+  description = "URI to ECR repository"
+  type = string
+}
+
+variable "iam_policy_name" {
+  description = "IAM Policy Name"
+  type = string
+}
+
+variable "apprunner_policy_name" {
+  description = "AppRunner Instance Policy Name"
+  type = string
+}
+
+variable "apprunner_container_port" {
+  description = "Container port number"
+  type = number
+  default = 8080
+}
+```
+
+Redusert CPU til 256 og Minne til 1024:
+
+```
+*****
+instance_configuration {
+    instance_role_arn = aws_iam_role.role_for_apprunner_service.arn
+    cpu = 256
+    memory = 1024
+}
+*****
+```
