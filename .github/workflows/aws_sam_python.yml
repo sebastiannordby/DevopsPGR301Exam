@@ -4,8 +4,10 @@ on:
   push:
     branches:
       - main
-    paths:
-        - 'kjell/**' 
+    # This part can be used to only trigger build when changes
+    # are applied inside the kjell folder
+    # paths:
+    #     - 'kjell/**' 
   workflow_dispatch:
 
 jobs:
@@ -31,5 +33,5 @@ jobs:
       working-directory: ./kjell
 
     - name: Deploy SAM application
-      run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name kandidat2033 --capabilities CAPABILITY_IAM --s3-bucket kandidat2033b
+      run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name kandidat2033 --capabilities CAPABILITY_IAM --resolve-s3
       working-directory: ./kjell
