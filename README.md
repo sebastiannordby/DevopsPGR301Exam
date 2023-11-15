@@ -42,3 +42,14 @@ Policies:
         BucketName: !Ref ImageS3Bucket
 ******      
 ```
+
+Fikk fortsatt "Internal Server Error", men prøvde så å teste Gatway'en via AWS Gateway API og fant følgende feilmelding:
+"Wed Nov 15 14:05:05 UTC 2023 : Endpoint response body before transformations: {"errorMessage":"2023-11-15T14:05:05.017Z 30400a8b-8eab-47e5-a4f4-22473f201533 Task timed out after 3.01 seconds"}"
+
+Prøver da følgende i "template.yml"
+```
+HelloWorldFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+        Timeout: 60 # Timeout for function
+```
