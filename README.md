@@ -53,3 +53,7 @@ HelloWorldFunction:
     Properties:
         Timeout: 60 # Timeout for function
 ```
+
+## Oppgave 1 - A - Resultat:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/f004132d-ad6b-4738-b68f-1026e86e0965)
+
