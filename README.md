@@ -2,7 +2,9 @@
 
 # Oppgave 1
 
-## Oppgave 1 - A [![Publish Python AWS SAM](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml)
+## Oppgave 1 - A 
+
+[![Publish Python AWS SAM](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml)
 
 Følgende secrets må være konfigurert for å kjøre workflow:
 - AWS_ACCESS_KEY_ID (Lages i IAM)
