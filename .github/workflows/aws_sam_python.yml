@@ -1,6 +1,6 @@
 name: Publish Python AWS SAM
 
-on: [main, workflow_dispatch]
+on: [push, workflow_dispatch]
 
 jobs:
   deploy:
