@@ -4,6 +4,11 @@
 
 ## Oppgave 1 - A
 
+Følgende secrets må være konfigurert for å kjøre workflow:
+- AWS_ACCESS_KEY_ID (Lages i IAM)
+- AWS_SECRET_ACCESS_KEY (Lages i IAM)
+- BUCKET_NAME (Navn på eksisterende bøtte)
+
 Gjort om hardkodet BUCKET_NAME variabel til å hente ifra miljøvariabler:
 
 ```
