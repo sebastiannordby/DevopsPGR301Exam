@@ -6,7 +6,7 @@ Resources:
   ImageS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: kandidat2033b
+      BucketName: kjellsimagebucket
 
   HelloWorldFunction:
     Type: AWS::Serverless::Function 
