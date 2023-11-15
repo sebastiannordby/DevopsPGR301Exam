@@ -43,7 +43,7 @@ resource "aws_apprunner_service" "service" {
         port = var.apprunner_container_port
       }
 
-      image_identifier = "${var.ecr_repository_uri}:latest"
+      image_identifier = var.ecr_repository_uri
       image_repository_type = "ECR"
     }
 
