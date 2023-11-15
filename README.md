@@ -82,6 +82,7 @@ CMD ["python", "./app.py"]
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/8352b4d9-ba36-476b-9f10-0fac3805b887)
 
 # Oppgave 2
+[![Build and Push to AWS ECR](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml)
 
 ## Oppgave 2 - A
 Dockerfile'n later til å fungere og begge kommandoer oppgitt i oppgaven kjører, som vist i resultat.
@@ -137,5 +138,14 @@ For bygging i Github Actions trengs følgende secrets:
 
 Det er også forhånds laget et Elastic Container Repository(ECR) med navn:
 [kandidat2033ecr](https://eu-west-1.console.aws.amazon.com/ecr/repositories/private/244530008913/kandidat2033ecr?region=eu-west-1)
+
+Oppgave 2 - B - Resultat
+[Commit'en har id d14dcab544268b3192fbc74487474159d8d98691](https://github.com/sebastiannordby/DevopsPGR301Exam/commit/d14dcab544268b3192fbc74487474159d8d98691).
+
+Kjøring av workflow:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/830d96eb-00b7-4920-9546-4ce26db11da3)
+
+Publisert til ECR og tagget med "latest" og hash for commit:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/6f5ef3fb-64a1-4f02-9196-aec3ffb77efb)
 
 
