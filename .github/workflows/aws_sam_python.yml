@@ -4,10 +4,8 @@ on:
   push:
     branches:
       - main
-    # This part can be used to only trigger build when changes
-    # are applied inside the kjell folder
-    # paths:
-    #     - 'kjell/**' 
+    paths:
+        - 'kjell/**' 
   workflow_dispatch:
 
 jobs:
