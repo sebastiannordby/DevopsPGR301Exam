@@ -54,7 +54,7 @@ HelloWorldFunction:
 ```
 
 ## Oppgave 1 - A - Resultat:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/f004132d-ad6b-4738-b68f-1026e86e0965)
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/17a20dd2-42dc-4771-b226-3ec510960d91)
 
 ## Oppgave 1 - B
 Dockerfilen jeg skrev later til å fungere og begge kommandoer oppgitt i oppgaven kjører, som vist i resultat.
