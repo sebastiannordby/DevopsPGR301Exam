@@ -13,9 +13,11 @@ import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @RestController
 public class RekognitionController implements ApplicationListener<ApplicationReadyEvent> {
@@ -82,8 +85,7 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
      * @return
      */
     @GetMapping(value = "/download-image")
-    @ResponseBody
-    public byte[] downloadImage(
+    public ResponseEntity<StreamingResponseBody> downloadImage(
         @RequestParam String bucketName,
         @RequestParam String imageName
     ) throws IOException {
@@ -91,25 +93,41 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
         "downloadImage bucketName=" + bucketName +
             " imageName= " + imageName);
 
+        var mimeType = getMimeType(imageName);
         var distributionSummary = meterRegistry
             .summary("s3.download.image.size");
 
         var s3Object = s3Client
             .getObject(bucketName, imageName);
 
+        // Metrics: Register the size of the file.
+        distributionSummary.record(s3Object
+            .getObjectMetadata()
+            .getContentLength());
+
         var content = s3Object
             .getObjectContent()
             .readAllBytes();
 
-        // Metrics: Register the size downloaded.
-        distributionSummary.record(content.length);
-
         logger.info(
-        "bucketName=" + bucketName +
+            "bucketName=" + bucketName +
             " imageName= " + imageName +
+            " mineType= " + mimeType +
             " size=" + content.length);
 
-        return content;
+        StreamingResponseBody stream = outputStream -> {
+            try (InputStream inputStream = s3Object.getObjectContent()) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
+        };
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(mimeType))
+            .body(stream);
     }
 
     /**
@@ -193,6 +211,33 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
                 .flatMap(p -> p.getBodyParts().stream())
                 .anyMatch(bodyPart -> bodyPart.getName().equals("FACE")
                         && bodyPart.getEquipmentDetections().isEmpty());
+    }
+
+
+    /**
+     * Takes a fileName and returns the MimeType
+     * corresponding to the extension of the fileName.
+     *
+     * jpg | jpeg = "image/jpeg"
+     * png = "image/png"
+     * gif = "image/gif"
+     * */
+    private String getMimeType(String fileName) {
+        var extension = fileName
+            .substring(fileName.lastIndexOf(".") + 1)
+            .toLowerCase();
+
+        switch (extension) {
+            case "jpg":
+            case "jpeg":
+                return "image/jpeg";
+            case "png":
+                return "image/png";
+            case "gif":
+                return "image/gif";
+            default:
+                return "application/octet-stream";
+        }
     }
 
 
