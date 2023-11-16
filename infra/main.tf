@@ -23,6 +23,13 @@ resource "aws_apprunner_service" "service" {
 
     auto_deployments_enabled = true
   }
+
+  environment {
+    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_NAMESPACE = var.cloudwatch_namespace
+    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_BATCHSIZE = tostring(var.cloudwatch_batch_size)
+    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_STEP = var.cloudwatch_step
+    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_ENABLED = tostring(var.cloudwatch_enabled)
+  }
 }
 
 resource "aws_iam_role" "role_for_apprunner_service" {
