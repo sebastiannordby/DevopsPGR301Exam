@@ -1,6 +1,6 @@
 name: Build and Push to AWS ECR
 
-on: [push, workflow_dispatch]
+on: [push]
 
 jobs:
   build-and-push-ecr:
