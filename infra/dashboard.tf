@@ -12,7 +12,7 @@ resource "aws_cloudwatch_dashboard" "main" {
       "properties": {
         "metrics": [
           [
-            "${var.dashboard_name}",
+            "${var.cloudwatch_namespace}",
             "scan_ppe",
             { "stat": "Sum", "period": 300 }
           ]
@@ -30,7 +30,7 @@ resource "aws_cloudwatch_dashboard" "main" {
       "properties": {
         "metrics": [
           [
-            "${var.dashboard_name}",
+            "${var.cloudwatch_namespace}",
             "s3.download.image.size",
             { "stat": "Average", "period": 300 }
           ]
@@ -48,7 +48,7 @@ resource "aws_cloudwatch_dashboard" "main" {
       "properties": {
         "metrics": [
           [
-            "${var.dashboard_name}",
+            "${var.cloudwatch_namespace}",
             "s3.list.images.timer",
             { "stat": "Average", "period": 300 }
           ]
