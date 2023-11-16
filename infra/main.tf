@@ -15,8 +15,7 @@ resource "aws_apprunner_service" "service" {
     image_repository {
       image_configuration {
         port = var.apprunner_container_port
-
-        runtime_environment_variables {
+        runtime_environment_variables = {
           MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_NAMESPACE = var.cloudwatch_namespace
           MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_BATCHSIZE = tostring(var.cloudwatch_batch_size)
           MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_STEP = var.cloudwatch_step
