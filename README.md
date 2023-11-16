@@ -196,21 +196,23 @@ instance_configuration {
 *****
 ```
 
-## Oppgave 3 - B
-Har utvidet workflow fil til å kjøre Terraform:
+## Oppgave 3 - B:
+
+Lagt til en ny jobb i workflow "aws_deploy_ecr.yml":
 
 ```
-  terraform-deploy:
+*****
+terraform-deploy:
     needs: [build-and-push-ecr] 
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+    
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-
+    
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -221,7 +223,7 @@ Har utvidet workflow fil til å kjøre Terraform:
       - name: Terraform Init
         working-directory: ./infra
         run: terraform init
-
+    
       - name: Terraform Apply
         working-directory: ./infra
         run: terraform apply -auto-approve -input=false
@@ -232,17 +234,42 @@ Har utvidet workflow fil til å kjøre Terraform:
           TF_VAR_apprunner_container_port: 8080
           TF_VAR_apprunner_service_name: kandidat2033apprunr
           TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
-```
-
-I siste steg("Terraform Apply") i jobben får Terraform variablene verdier:
-
-```
-*****
-TF_LOG: DEBUG
-TF_VAR_iam_policy_name: kandidat2033polly
-TF_VAR_ecr_repository_uri: 244530008913.dkr.ecr.eu-west-1.amazonaws.com/seno005-private
-TF_VAR_apprunner_container_port: 8080
-TF_VAR_apprunner_service_name: kandidat2033apprunr
-TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
 *****
 ```
+
+På siste steg "Terraform Apply" kan diverse variabler endres etter ditt ønske
+- TF_VAR_iam_policy_name (Navn på Policy som blir opprettet)
+- TF_VAR_apprunner_container_port (Hvem port AppRunner skal kjøre på)
+- TF_VAR_apprunner_service_name (Hva AppRunner instansen skal hete)
+- TF_VAR_apprunner_policy_name (Hva AppRunner policien skal hete)
+
+```
+env:
+  TF_LOG: DEBUG
+  TF_VAR_iam_policy_name: kandidat2033polly
+  TF_VAR_ecr_repository_uri: 244530008913.dkr.ecr.eu-west-1.amazonaws.com/seno005-private
+  TF_VAR_apprunner_container_port: 8080
+  TF_VAR_apprunner_service_name: kandidat2033apprunr
+  TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
+```
+
+Litt motstand med å sette opp(fordi kloke meg kopierte uri til feil ECR), men det ordnet seg:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/076688de-864d-4023-9f7b-16f782edc36c)
+
+Etter deploy dukket instansen opp i AppRunner:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/ca6aec84-7ccc-411f-b31f-9bdca65f8984)
+
+Policien blir også opprettet:
+
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/ba4e2cb8-5a97-43ac-9506-7d1b506cc692)
+
+Endte opp meg å legge til S3 Full Access med Terraform, dette er vel strengt talt ikke nødvendig ettersom 
+du(Glenn) har laget en rolle(AppRunnerECRAccessRole) som implisitt allerede gjør dette:
+
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/3a2cae7c-78f4-4999-aba8-cf4acc958e8a)
+
+
+## Oppgave 3 - Resultat:
+Kjører en "curl" kommando mot AppRunner fra Cloud9-miljøet og resultatet blir(drumroll): 
+
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/2d3bbc22-a6f1-4975-8420-8cf2b957c96a)
