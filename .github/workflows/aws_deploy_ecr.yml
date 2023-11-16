@@ -65,3 +65,4 @@ jobs:
           TF_VAR_apprunner_container_port: 8080
           TF_VAR_apprunner_service_name: kandidat2033apprunr
           TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
+          TF_VAR_dashboard_name: kandidat2033dashboard
