@@ -447,7 +447,7 @@ Denne standarden er viktig å sette ettersom det kan føre til en "bomba" kodeba
 I Github bruker man da Github Actions for å automatisere bygg og eventuelle tester. Prosessen her har da en eller flere triggere, som regel basert på hva slags
 flow teamet velger.
 
-
+## Oppgave 5 - B
 
 
 
