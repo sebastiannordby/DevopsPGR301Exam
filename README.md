@@ -406,6 +406,46 @@ Workflow fil setter variablene for Terraform(som før, bare flere):
 *****
 ```
 
+# Oppgave 5
+
+## Oppgave 5 - A
+
+**En definisjon av kontinuerlig integrasjon.**
+
+Kontinuerlig integrasjon, eller CI, er en slags praksis for utvikling der oss utviklere lager og vedlikeholder i et versjonshåndteringssystem.
+Versjonhåndteringsystemet blir for det meste kalt for et repository, og standarden er vel per i dag GIT, selvom det er andre systemer som kan brukes. 
+Ettersom jeg har drevet med utvikling en liten stund, brukte jeg faktisk TFVC(team foundation version control) i en del år. Uansett, når koden kommer inn til versjonshåntering systemet
+blir det triggret et automatisk bygg og eventuel intergasjonstesting.
+
+**Fordelene med å bruke CI i et utviklingsprosjekt - hvordan CI kan forbedre kodekvaliteten og effektivisere utviklingsprosessen.**
+
+*Fordeler med bygg*
+Fordelene her er da at man får versifisert at koden bygger på en annen maskin en selve utvikleren sin,
+og unngår den klassiske "it works on my machine". Dette kan klassifiseres som "tidlig feilopptagelse".
+
+*Forbedret kodekvalitet og raskere feedback*
+Man kan oppnå forbedret kode kvalitet via å kjøre automatiserte tester, men også diverse analysering av koden. 
+Dette kan igjen brukes i feedback-loop for å sikre bedre kvalitet på software som lages.
+
+**Hvordan jobber man med CI i Github rent i praksis?**
+Først og fremst har man et repository. Dette er da stedet der kildekoden lagres.
+
+Deretter setter man som regel en del standarder for at ting skal gå smidig:
+
+*Kodestandard*
+Ofte settes det i kodestandard som legges inn i en form for dokumentasjonsverktøy. Denne standarden kan inneholde alt fra filnavngivning til plassering på kodeblokker.
+
+*Dokumentasjon*
+Ikke alle skriver dokumentasjon, dette grunnet at ofte blir dokumentasjonen ikke vedlikeholdt i ettertid, noe som gjør den helt ubrukelig.
+Men i enkelte tilfeller kreves det at prosjektet har en dokumentasjon som er kontinuerlig oppdatert.
+
+*Flow for innsjekking*
+Det er diverse flows for hvordan man kan sjekke inn kode. Dette går på om man skal branche ut eller ikke, hvordan man skal branche ut, eller om man bare rett og slett skal pushe rett til main.
+Denne standarden er viktig å sette ettersom det kan føre til en "bomba" kodebase hvis ikke. 
+
+*Automatisering av bygg og tester*
+I Github bruker man da Github Actions for å automatisere bygg og eventuelle tester. Prosessen her har da en eller flere triggere, som regel basert på hva slags
+flow teamet velger.
 
 
 
