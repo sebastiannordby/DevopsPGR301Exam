@@ -273,3 +273,143 @@ du(Glenn) har laget en rolle(AppRunnerECRAccessRole) som implisitt allerede gjø
 Kjører en "curl" kommando mot AppRunner fra Cloud9-miljøet og resultatet blir(drumroll): 
 
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/2d3bbc22-a6f1-4975-8420-8cf2b957c96a)
+
+# Oppgave 4
+Flyttet Terraform variablene til egen fil "variables.tf":
+```
+variable "dashboard_name" {
+  type = string
+}
+
+variable "apprunner_service_name" {
+  description = "Name of the AppRunner Service"
+  type = string
+}
+
+variable "ecr_repository_uri" {
+  description = "ECR URI"
+  type = string
+}
+
+variable "iam_policy_name" {
+  description = "IAM Policy Name"
+  type = string
+}
+
+variable "apprunner_policy_name" {
+  description = "AppRunner Instance Policy Name"
+  type = string
+}
+
+variable "apprunner_container_port" {
+  description = "AppRunner Instance Port Number"
+  type = number
+  default = 8080
+}
+```
+
+La til variabel på siste steg "Terraform Apply":
+```
+*****
+- name: Terraform Apply
+    working-directory: ./infra
+    run: terraform apply -auto-approve -input=false
+    env:
+      ******
+      TF_VAR_dashboard_name: kandidat2033dashboard # HER
+*****
+```
+Merger en PR fra features inn i main:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/5ab84d10-978b-4bb9-99e3-92c88ed25dde)
+
+Badda bing, første forsøk:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/fea3a853-cf79-4d0a-9788-cf7e1a2b1e6a)
+
+Dashboardet ser ut som tenkt (gjenstår bare å se om det kommer noe data inn hit):
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/0e82f874-0d9f-4b1c-b0a5-9de1937af2b1)
+
+Testing av endepunkter:
+
+"curl https://hhpxh2tyds.eu-west-1.awsapprunner.com/scan-ppe?bucketName=kjellsimagebucket":
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/177d752b-1532-4091-bb5a-89e3e3a93fe2)
+
+"curl https://hhpxh2tyds.eu-west-1.awsapprunner.com/list-images?bucketName=kjellsimagebucket":
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/6e011ecf-5342-42c3-b290-340ed365cb8a)
+
+"curl https://hhpxh2tyds.eu-west-1.awsapprunner.com/download-image?bucketName=kjellsimagebucket&imageName=helmet.jpeg":
+- Dette var ikke helt ønsket resultat, så endret endepunktet til å streame filen og sette riktig mimetype så det faktisk kan vises i nettleser
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/c314bf49-4308-4801-82b4-7a495ca6ddc8)
+
+Sånn så det ut før streaming uten MimeType:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/60a3665c-b64b-42d8-842b-b30db01b9789)
+
+Oppdaget så via CloudWatch at bildet ikke kunne lastes ned pga feil i metrics, så tenkte litt over dette med application.properties,
+bestemte meg for å ta en refactor.
+
+Refactor - legge til miljøvariabler via Terraform som gjør konfigurering begrenset til workflow filen:
+
+Nye varibler i "variables.tf":
+```
+*****
+variable "cloudwatch_namespace" {
+  description = "CloudWatch namespace for metrics"
+  type        = string
+}
+
+variable "cloudwatch_batch_size" {
+  description = "Batch size for CloudWatch metrics"
+  type        = number
+  default     = 20
+}
+
+variable "cloudwatch_step" {
+  description = "Step size for CloudWatch metrics"
+  type        = string
+  default     = "1m"
+}
+
+variable "cloudwatch_enabled" {
+  description = "Enable CloudWatch metrics"
+  type        = bool
+  default     = true
+}
+```
+
+Terraform setter miljøvaribler for AppRunner "main.tf":
+```
+resource "aws_apprunner_service" "service" {
+  service_name = var.apprunner_service_name
+
+  *****
+ 
+  environment {
+    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_NAMESPACE = var.cloudwatch_namespace
+    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_BATCHSIZE = tostring(var.cloudwatch_batch_size)
+    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_STEP = var.cloudwatch_step
+    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_ENABLED = tostring(var.cloudwatch_enabled)
+  }
+}
+```
+
+Workflow fil setter variablene for Terraform(som før, bare flere):
+```
+*****
+- name: Terraform Apply
+    working-directory: ./infra
+    run: terraform apply -auto-approve -input=false
+    env:
+      *****
+      TF_VAR_cloudwatch_enabled: true
+      TF_VAR_cloudwatch_namespace: Kandidat2033Metrics
+      TF_VAR_cloudwatch_batch_size: 20
+      TF_VAR_cloudwatch_step: 1m
+*****
+```
+
+
+
+
+
+
+
+
