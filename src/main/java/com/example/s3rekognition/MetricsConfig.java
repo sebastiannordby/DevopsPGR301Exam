@@ -21,10 +21,10 @@ import java.util.Map;
 
 @Configuration
 public class MetricsConfig {
-    @Value("${cloudwatch.namespace}")
+    @Value("${management.metrics.export.cloudwatch.namespace}")
     private String cloudWatchNamespace;
 
-    @Value("${cloudwatch.step}")
+    @Value("${management.metrics.export.cloudwatch.step}")
     private String cloudWatchStep;
 
     @Bean
