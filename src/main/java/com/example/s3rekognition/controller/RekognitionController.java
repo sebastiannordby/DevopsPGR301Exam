@@ -9,27 +9,107 @@ import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.example.s3rekognition.PPEClassificationResponse;
 import com.example.s3rekognition.PPEResponse;
+import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
+import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RekognitionController implements ApplicationListener<ApplicationReadyEvent> {
-
     private final AmazonS3 s3Client;
     private final AmazonRekognition rekognitionClient;
+    private final MeterRegistry meterRegistry;
 
     private static final Logger logger = Logger.getLogger(RekognitionController.class.getName());
 
-    public RekognitionController() {
+    @Autowired
+    public RekognitionController(
+        MeterRegistry meterRegistry
+    ) {
+        this.meterRegistry = meterRegistry;
         this.s3Client = AmazonS3ClientBuilder.standard().build();
         this.rekognitionClient = AmazonRekognitionClientBuilder.standard().build();
+    }
+
+    /**
+     * This endpoint takes an S3 bucket name in as an argument and returns the content
+     * of the given bucket.
+     * <p>
+     *
+     * @param bucketName
+     * @return
+     */
+    @GetMapping(
+        value = "/list-images",
+        produces = "application/json")
+    @ResponseBody
+    public List<String> listImages(
+        @RequestParam String bucketName
+    ) {
+        logger.info("Listing contents of bucketName=" + bucketName);
+        var timer = meterRegistry.timer("s3.list.images.timer");
+
+        // Metrics: Record time used to execute the listing of content in bucket.
+        return timer.record(() -> {
+            var objects = s3Client
+                .listObjects(bucketName)
+                .getObjectSummaries();
+
+            return objects
+                .stream()
+                .map(S3ObjectSummary::getKey)
+                .collect(Collectors.toList());
+        });
+    }
+
+    /**
+     * This endpoint takes an S3 bucket name in as an argument and an image from the bucket,
+     * then returns the content image.
+     * <p>
+     *
+     * @param bucketName
+     * @param imageName
+     * @return
+     */
+    @GetMapping(value = "/download-image")
+    @ResponseBody
+    public byte[] downloadImage(
+        @RequestParam String bucketName,
+        @RequestParam String imageName
+    ) throws IOException {
+        logger.info(
+        "downloadImage bucketName=" + bucketName +
+            " imageName= " + imageName);
+
+        var distributionSummary = meterRegistry
+            .summary("s3.download.image.size");
+
+        var s3Object = s3Client
+            .getObject(bucketName, imageName);
+
+        var content = s3Object
+            .getObjectContent()
+            .readAllBytes();
+
+        // Metrics: Register the size downloaded.
+        distributionSummary.record(content.length);
+
+        logger.info(
+        "bucketName=" + bucketName +
+            " imageName= " + imageName +
+            " size=" + content.length);
+
+        return content;
     }
 
     /**
@@ -40,9 +120,17 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
      * @param bucketName
      * @return
      */
-    @GetMapping(value = "/scan-ppe", consumes = "*/*", produces = "application/json")
+    @GetMapping(
+        value = "/scan-ppe",
+        consumes = "*/*",
+        produces = "application/json")
     @ResponseBody
-    public ResponseEntity<PPEResponse> scanForPPE(@RequestParam String bucketName) {
+    public ResponseEntity<PPEResponse> scanForPPE(
+        @RequestParam String bucketName
+    ) {
+        // Metrics: Count how many times this endpoint is called.
+        meterRegistry.counter("scan_ppe").increment();
+
         // List all objects in the S3 bucket
         ListObjectsV2Result imageList = s3Client.listObjectsV2(bucketName);
 
@@ -58,27 +146,37 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
 
             // This is where the magic happens, use AWS rekognition to detect PPE
             DetectProtectiveEquipmentRequest request = new DetectProtectiveEquipmentRequest()
-                    .withImage(new Image()
-                            .withS3Object(new S3Object()
-                                    .withBucket(bucketName)
-                                    .withName(image.getKey())))
-                    .withSummarizationAttributes(new ProtectiveEquipmentSummarizationAttributes()
-                            .withMinConfidence(80f)
-                            .withRequiredEquipmentTypes("FACE_COVER"));
+                .withImage(new Image()
+                    .withS3Object(new S3Object()
+                            .withBucket(bucketName)
+                            .withName(image.getKey()))
+                )
+                .withSummarizationAttributes(new ProtectiveEquipmentSummarizationAttributes()
+                    .withMinConfidence(80f)
+                    .withRequiredEquipmentTypes("FACE_COVER")
+                );
 
-            DetectProtectiveEquipmentResult result = rekognitionClient.detectProtectiveEquipment(request);
+            DetectProtectiveEquipmentResult result = rekognitionClient
+                .detectProtectiveEquipment(request);
 
             // If any person on an image lacks PPE on the face, it's a violation of regulations
             boolean violation = isViolation(result);
 
-            logger.info("scanning " + image.getKey() + ", violation result " + violation);
+            logger.info(
+            "scanning " + image.getKey() +
+                ", violation result " + violation);
+
             // Categorize the current image as a violation or not.
-            int personCount = result.getPersons().size();
-            PPEClassificationResponse classification = new PPEClassificationResponse(image.getKey(), personCount, violation);
+            PPEClassificationResponse classification = new PPEClassificationResponse(
+                image.getKey(),
+                result.getPersons().size(),
+                violation);
+
             classificationResponses.add(classification);
         }
-        PPEResponse ppeResponse = new PPEResponse(bucketName, classificationResponses);
-        return ResponseEntity.ok(ppeResponse);
+
+        return ResponseEntity.ok(
+            new PPEResponse(bucketName, classificationResponses));
     }
 
     /**
