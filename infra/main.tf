@@ -17,7 +17,7 @@ resource "aws_apprunner_service" "service" {
         port = var.apprunner_container_port
       }
 
-      image_identifier = "${var.ecr_repository_uri}:latest"
+      image_identifier = var.ecr_repository_uri
       image_repository_type = "ECR"
     }
 
@@ -61,6 +61,16 @@ data "aws_iam_policy_document" "policy" {
     effect = "Allow"
     actions = ["cloudwatch:*"]
     resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability"
+    ]
+    resources = ["arn:aws:ecr:eu-west-1:244530008913:repository/seno005-private"]
   }
 }
 

@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "seno005-private"
+    bucket = "kandidat2033b"
     key = "terraform/state"
     region = "eu-west-1"
   }
