@@ -15,17 +15,17 @@ resource "aws_apprunner_service" "service" {
     image_repository {
       image_configuration {
         port = var.apprunner_container_port
+
+        environment {
+          MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_NAMESPACE = var.cloudwatch_namespace
+          MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_BATCHSIZE = tostring(var.cloudwatch_batch_size)
+          MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_STEP = var.cloudwatch_step
+          MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_ENABLED = tostring(var.cloudwatch_enabled)
+        }
       }
 
       image_identifier = var.ecr_repository_uri
       image_repository_type = "ECR"
-    }
-
-    environment {
-      MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_NAMESPACE = var.cloudwatch_namespace
-      MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_BATCHSIZE = tostring(var.cloudwatch_batch_size)
-      MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_STEP = var.cloudwatch_step
-      MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_ENABLED = tostring(var.cloudwatch_enabled)
     }
 
     auto_deployments_enabled = true
