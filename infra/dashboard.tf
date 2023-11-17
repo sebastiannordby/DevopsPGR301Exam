@@ -13,7 +13,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         "metrics": [
           [
             "${var.cloudwatch_namespace}",
-            "scan_ppe",
+            "scan_ppe.count",
             { "stat": "Sum", "period": 300 }
           ]
         ],
@@ -32,11 +32,30 @@ resource "aws_cloudwatch_dashboard" "main" {
           [
             "${var.cloudwatch_namespace}",
             "s3.download.image.size",
+            "avg",
             { "stat": "Average", "period": 300 }
+          ],
+          [
+            "${var.cloudwatch_namespace}",
+            "s3.download.image.size",
+            "count",
+            { "stat": "Sum", "period": 300 }
+          ],
+          [
+            "${var.cloudwatch_namespace}",
+            "s3.download.image.size",
+            "max",
+            { "stat": "Maximum", "period": 300 }
+          ],
+          [
+            "${var.cloudwatch_namespace}",
+            "s3.download.image.size",
+            "sum",
+            { "stat": "Sum", "period": 300 }
           ]
         ],
         "region": "eu-west-1",
-        "title": "Average Image Size"
+        "title": "Image Download Metrics"
       }
     },
     {
@@ -49,12 +68,27 @@ resource "aws_cloudwatch_dashboard" "main" {
         "metrics": [
           [
             "${var.cloudwatch_namespace}",
-            "s3.list.images.timer",
+            "s3.list.images.timer.avg",
             { "stat": "Average", "period": 300 }
+          ],
+          [
+            "${var.cloudwatch_namespace}",
+            "s3.list.images.timer.count",
+            { "stat": "Sum", "period": 300 }
+          ],
+          [
+            "${var.cloudwatch_namespace}",
+            "s3.list.images.timer.max",
+            { "stat": "Maximum", "period": 300 }
+          ],
+          [
+            "${var.cloudwatch_namespace}",
+            "s3.list.images.timer.sum",
+            { "stat": "Sum", "period": 300 }
           ]
         ],
         "region": "eu-west-1",
-        "title": "Average Time to List Images"
+        "title": "Image Listing Metrics"
       }
     }
   ]
