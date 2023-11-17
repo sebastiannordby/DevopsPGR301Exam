@@ -72,3 +72,4 @@ jobs:
           TF_VAR_cloudwatch_batchSize: 20
           TF_VAR_cloudwatch_step: 5s
           TF_VAR_cloudwatch_enabled: true
+          TF_VAR_alert_email: "sebastianbjornstad@hotmail.com"
