@@ -22,7 +22,7 @@ resource "aws_apprunner_service" "service" {
           },
           {
             name = "management.metrics.export.cloudwatch.batchSize"
-            value = var.cloudwatch_batch_size
+            value = string(var.cloudwatch_batch_size)
           },
           {
             name = "management.metrics.export.cloudwatch.step"
@@ -30,7 +30,7 @@ resource "aws_apprunner_service" "service" {
           },
           {
             name = "management.metrics.export.cloudwatch.enabled"
-            value = var.cloudwatch_enabled
+            value = string(var.cloudwatch_enabled)
           }
         ]
       }
