@@ -274,141 +274,98 @@ Kjører en "curl" kommando mot AppRunner fra Cloud9-miljøet og resultatet blir(
 
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/2d3bbc22-a6f1-4975-8420-8cf2b957c96a)
 
-# Oppgave 4
-Flyttet Terraform variablene til egen fil "variables.tf":
-```
-variable "dashboard_name" {
-  type = string
-}
+# Oppgave 4 A
+For å gjøre oppsett av applikasjonen enklere, flyttet jeg Terraform variablene til egen fil ["variables.tf"](https://github.com/sebastiannordby/DevopsPGR301Exam/blob/main/infra/variables.tf).
+Jeg ville også ha mulighet til å konfigurere metrikkene via Github Actions som så sendte videre til Terraform.
 
-variable "apprunner_service_name" {
-  description = "Name of the AppRunner Service"
-  type = string
-}
+Ved en rask titt på byggene og commit historikken så ble det fort trøbbel med dette eksperimentet, men jeg ville ikke gi meg. 
+Jeg skulle få til dette med miljøvariabler.
 
-variable "ecr_repository_uri" {
-  description = "ECR URI"
-  type = string
-}
-
-variable "iam_policy_name" {
-  description = "IAM Policy Name"
-  type = string
-}
-
-variable "apprunner_policy_name" {
-  description = "AppRunner Instance Policy Name"
-  type = string
-}
-
-variable "apprunner_container_port" {
-  description = "AppRunner Instance Port Number"
-  type = number
-  default = 8080
-}
-```
-
-La til variabel på siste steg "Terraform Apply":
+Fant jo til slutt ut av koden har fungert flere ganger, men Terraform kan ikke oppdatere miljøvariabler etter opprettelse.
+Dermed måtte jeg legge inn en lifecycle på applikasjonen som gjør at denne slettes hver gang og opprettes på nytt:
 ```
 *****
-- name: Terraform Apply
-    working-directory: ./infra
-    run: terraform apply -auto-approve -input=false
-    env:
-      ******
-      TF_VAR_dashboard_name: kandidat2033dashboard # HER
+lifecycle {
+    create_before_destroy = true
+}
 *****
 ```
-Merger en PR fra features inn i main:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/5ab84d10-978b-4bb9-99e3-92c88ed25dde)
 
-Badda bing, første forsøk:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/fea3a853-cf79-4d0a-9788-cf7e1a2b1e6a)
-
-Dashboardet ser ut som tenkt (gjenstår bare å se om det kommer noe data inn hit):
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/0e82f874-0d9f-4b1c-b0a5-9de1937af2b1)
-
-Testing av endepunkter:
-
-"curl https://hhpxh2tyds.eu-west-1.awsapprunner.com/scan-ppe?bucketName=kjellsimagebucket":
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/177d752b-1532-4091-bb5a-89e3e3a93fe2)
-
-"curl https://hhpxh2tyds.eu-west-1.awsapprunner.com/list-images?bucketName=kjellsimagebucket":
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/6e011ecf-5342-42c3-b290-340ed365cb8a)
-
-"curl https://hhpxh2tyds.eu-west-1.awsapprunner.com/download-image?bucketName=kjellsimagebucket&imageName=helmet.jpeg":
-- Dette var ikke helt ønsket resultat, så endret endepunktet til å streame filen og sette riktig mimetype så det faktisk kan vises i nettleser
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/c314bf49-4308-4801-82b4-7a495ca6ddc8)
-
-Sånn så det ut før streaming uten MimeType:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/60a3665c-b64b-42d8-842b-b30db01b9789)
-
-Oppdaget så via CloudWatch at bildet ikke kunne lastes ned pga feil i metrics, så tenkte litt over dette med application.properties,
-bestemte meg for å ta en refactor.
-
-Refactor - legge til miljøvariabler via Terraform som gjør konfigurering begrenset til workflow filen:
-
-Nye varibler i "variables.tf":
+De nye variablene er følgende:
+```
 ```
 *****
 variable "cloudwatch_namespace" {
   description = "CloudWatch namespace for metrics"
-  type        = string
+  type = string
 }
 
 variable "cloudwatch_batch_size" {
   description = "Batch size for CloudWatch metrics"
-  type        = number
-  default     = 20
+  type = string
+  default = "20"
 }
 
 variable "cloudwatch_step" {
   description = "Step size for CloudWatch metrics"
-  type        = string
-  default     = "1m"
+  type = string
+  default = "1m"
 }
 
 variable "cloudwatch_enabled" {
   description = "Enable CloudWatch metrics"
-  type        = bool
-  default     = true
+  type = string
+  default = "true"
 }
 ```
-
-Terraform setter miljøvaribler for AppRunner "main.tf":
-```
-resource "aws_apprunner_service" "service" {
-  service_name = var.apprunner_service_name
-
-  *****
- 
-  environment {
-    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_NAMESPACE = var.cloudwatch_namespace
-    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_BATCHSIZE = tostring(var.cloudwatch_batch_size)
-    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_STEP = var.cloudwatch_step
-    MANAGEMENT_METRICS_EXPORT_CLOUDWATCH_ENABLED = tostring(var.cloudwatch_enabled)
-  }
-}
 ```
 
-Workflow fil setter variablene for Terraform(som før, bare flere):
+Alle variablene kan da settes i steget "Terraform Apply":
 ```
 *****
 - name: Terraform Apply
     working-directory: ./infra
     run: terraform apply -auto-approve -input=false
     env:
-      *****
-      TF_VAR_cloudwatch_enabled: true
+      TF_VAR_iam_policy_name: kandidat2033polly
+      TF_VAR_ecr_repository_uri: 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2033ecr:latest
+      TF_VAR_apprunner_container_port: 8080
+      TF_VAR_apprunner_service_name: kandidat2033apprunr
+      TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
+      TF_VAR_dashboard_name: kandidat2033dashboard
       TF_VAR_cloudwatch_namespace: Kandidat2033Metrics
-      TF_VAR_cloudwatch_batch_size: 20
-      TF_VAR_cloudwatch_step: 1m
+      TF_VAR_cloudwatch_batchSize: 20
+      TF_VAR_cloudwatch_step: 5s
+      TF_VAR_cloudwatch_enabled: true
 *****
 ```
 
-Ved en rask titt på byggene og commit historikken så ble det fort trøbbel med dette eksperimentet, men jeg ville ikke gi meg. Jeg skulle få til dette med miljøvariabler.
-Etter 2 dager så kom det en ny oppdatering og da hev jeg meg på denne, og det så ut til å fungere med litt sjonglering frem og tilbake...
+Testing av nye endepunkter:
 
+Endepunkt for å gjøre PPE Scan:
+Her valgte jeg Counter som metrikk. Dette for å få statistikk på hvor mange ganger denne funksjonen kjører. Statistikken kan brukes til å vurdere optimaliseringer.
+Kanskje endepunktet blir kjørt mange ganger og man skulle ha cashet resultatene innenfor en viss periode, eller lignende.
+
+Endepunkt for å liste inneholdet i en bøtte("curl {URL_APP_RUNNER}/list-images?bucketName=kjellsimagebucket):
+Her valgte jeg Timer som metrikk rett og slett for å overvåke ytelse. Her kan man da sette opp varslinger hvis endepunktet skulle bruke 
+for lang tid på å eksekvere. En til fordel er at man kan se når hastighetsforskjeller i forhold til mengden brukere(hvis du har dette som metrikk),
+men også generelt for å ha statestikk på ytelse av tredjeparts tjenester.
+
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/6e011ecf-5342-42c3-b290-340ed365cb8a)
+
+Endepunkt for å laste ned bilde "{URL_APP_RUNNER}/download-image?bucketName=kjellsimagebucket&imageName=helmet.jpeg":
+Her valgte jeg DistributionSummary som metrikk. Jeg mener dette er en god metrikk for det å laste ned filer fordi man kan få 
+diverse statistikker som gjennomsnitt, maksimum, minimum av filstørrelsene. Ved å se på disse verdiene vet man da om man burde effektivisere koden, 
+kanskje streame over http i steden for å lese fra S3 og rett til minne, men også oppdage flaskehalser i forhold til filstørrelsene i forhold til ytelse på applikasjonen.
+
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/e70f3fe0-653e-48c4-bdf1-a1facd1b42c0)
+
+
+# Oppgave 4 - A - Resultat
+
+Et fungerende dashboard med navn "kandidat2033dashboard":
+
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/d63bc13f-5481-4922-9912-2f52ddcc605f)
 
 
 # Oppgave 5
