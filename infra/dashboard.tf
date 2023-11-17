@@ -31,7 +31,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         "metrics": [
           [
             "${var.cloudwatch_namespace}",
-            "s3.download.image.size",
+            "s3.download.image.avg",
             "avg",
             { "stat": "Average", "period": 300 }
           ],
@@ -43,7 +43,7 @@ resource "aws_cloudwatch_dashboard" "main" {
           ],
           [
             "${var.cloudwatch_namespace}",
-            "s3.download.image.size",
+            "s3.download.image.max",
             "max",
             { "stat": "Maximum", "period": 300 }
           ]
