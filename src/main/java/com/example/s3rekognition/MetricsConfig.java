@@ -45,6 +45,8 @@ public class MetricsConfig {
     }
 
     private CloudWatchConfig setupCloudWatchConfig() {
+        System.out.println("cloudwatchNamespace: " + cloudwatchNamespace);
+
         CloudWatchConfig cloudWatchConfig = new CloudWatchConfig() {
             private Map<String, String> configuration = Map.of(
                 "cloudwatch.namespace", 

@@ -69,3 +69,6 @@ jobs:
           TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
           TF_VAR_dashboard_name: kandidat2033dashboard
           TF_VAR_cloudwatch_namespace: Kandidat2033Metrics
+          TF_VAR_cloudwatch_batchSize: 20
+          TF_VAR_cloudwatch_step: 5s
+          TF_VAR_cloudwatch_enabled: true
