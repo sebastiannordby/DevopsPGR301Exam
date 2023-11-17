@@ -7,10 +7,14 @@ variable "alarm_email" {
   type = string
 }
 
-variable "prefix" {
+variable "name_prefix" {
   type = string
 }
 
 variable "metric_name" {
+  type = string
+}
+
+variable "cloudwatch_namespace" {
   type = string
 }
