@@ -30,9 +30,11 @@ resource "aws_apprunner_service" "service" {
 
     auto_deployments_enabled = true
   }
-}
 
-    
+  lifecycle {
+    create_before_destroy = true
+  }
+}
 
 resource "aws_iam_role" "role_for_apprunner_service" {
   name = var.apprunner_policy_name
