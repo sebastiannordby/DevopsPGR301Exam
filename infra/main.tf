@@ -1,13 +1,6 @@
 resource "aws_apprunner_service" "service" {
   service_name = var.apprunner_service_name
 
-  environment_variables = {
-    "management.metrics.export.cloudwatch.namespace" = var.cloudwatch_namespace
-    "management.metrics.export.cloudwatch.batchSize" = var.cloudwatch_batch_size
-    "management.metrics.export.cloudwatch.enabled" = var.cloudwatch_enabled
-    "management.metrics.export.cloudwatch.step" = var.cloudwatch_step
-  }
-
   instance_configuration {
     instance_role_arn = aws_iam_role.role_for_apprunner_service.arn
     cpu = 256
@@ -27,7 +20,25 @@ resource "aws_apprunner_service" "service" {
       image_identifier = var.ecr_repository_uri
       image_repository_type = "ECR"
     }
-    
+
+    environment_variables = [
+      {
+        name = "management.metrics.export.cloudwatch.namespace"
+        value = var.cloudwatch_namespace
+      },
+      {
+        name = "management.metrics.export.cloudwatch.batchSize"
+        value = var.cloudwatch_batch_size
+      },
+      {
+        name = "management.metrics.export.cloudwatch.step"
+        value = var.cloudwatch_step
+      },
+      {
+        name = "management.metrics.export.cloudwatch.enabled"
+        value = var.cloudwatch_enabled
+      },
+    ]  
 
     auto_deployments_enabled = true
   }
