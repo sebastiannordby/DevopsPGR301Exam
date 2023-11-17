@@ -85,7 +85,8 @@ DASHBOARD
 module "alarm" {
   source = "./alarm_module"
   alarm_email = var.alert_email
-  prefix = "scan-ppe-count"
+  name_prefix = "scan-ppe-count-2033"
   metric_name = "scan_ppe.count"
   threshold = 5
+  cloudwatch_namespace = var.cloudwatch_namespace
 }
