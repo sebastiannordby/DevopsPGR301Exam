@@ -406,6 +406,11 @@ Workflow fil setter variablene for Terraform(som før, bare flere):
 *****
 ```
 
+Ved en rask titt på byggene og commit historikken så ble det fort trøbbel med dette eksperimentet, men jeg ville ikke gi meg. Jeg skulle få til dette med miljøvariabler.
+Etter 2 dager så kom det en ny oppdatering og da hev jeg meg på denne, og det så ut til å fungere med litt sjonglering frem og tilbake...
+
+
+
 # Oppgave 5
 
 ## Oppgave 5 - A
@@ -449,7 +454,45 @@ flow teamet velger.
 
 ## Oppgave 5 - B
 
+**Scrum/Smidig Metodikk**
 
+Scrum er veldig populært for programvareutvikling, men det er egentlig et rammeverk for produktutvikling, og programvareutvikling faller under dette. Scrum er basert på korte iterasjoner/sykluser som er kalt for sprints. En sprint varer som regel i 1-4 uker. Formålet med en sprint er å levere et fungerende produkt, ved å sørge for å fullføre de delene som er planlagt for denne sprinten.
+
+I forhold til programvareutvikling er scrum basert på en håndfull prinsipper:
+- Fokus på kunden: Produktets behov og prioritering av funksjoner som skal utvikles i forhold til dette
+- Iterativ utvikling: Det skal gå fremover i små inkrementelle trinn(sprints)
+- Fokus og engasjement: Teamet er selv ansvarlig for planlegging, gjennomføring og evaluering av arbeidet
+
+For en student kan det jo virke som at dette med scrum og smidig er en standard alle bruker, men i virkeligheten er ikke dette sant. Mange henger faktisk etter grunnet at man er litt "grodd fast" i hvordan ting "alltid har blitt gjort". Andre utfordringer kan f.eks. være:
+
+- Endring i kultur og organisasjon: Det kan være utfordrene for organisasjoner som er vant til å jobbe på en bestemt måte å endre til en tilnærming av scrum/smidig
+- Godt samarbeid og kommunikasjon: Ettersom teamet selv er ansvarlig for planlegging, gjennomføring og evaluering krever dette et godt samarbeid og en god kommunikasjon mellom medlemmene av teamet
+- Komplekse prosjekter: I komplekse prosjekter kan det være utfordrende å holde seg til de grunnleggende prinsippene for scrum
+
+Selvom det er noen humper i veien er det også en del styrker, f.eks.:
+- Redusere riskio og suksess: Sprints gjør det mulig å levere funksjoner til kunden tidlig og ofte, dette fører til at man får raske tilbakemeldinger som kan brukes til å forbedre produktet
+- Tilfredshet: Raskere og oftere levering av funksjoner til kunden kan føre til at de kommer raskere i gang med å bruke produktet som kan føre til økt produktivitet hos kunden
+- Effektivitet og produktivitet: Ettersom teamet selv er ansvarlig for planlegging, gjennomføring og evaluering kan dette bidra til økt produktivitet, som også som regel kommer med økt effektivitet
+
+**DevOps Metodikk**
+De grunnleggende prinsippene i DevOps er: flyt, feedback og kontinuerlig forbedring.
+
+Flyt er et viktig prinsipp i DevOps. Flyt innebærer å levere programvare raskt og effektivt, uten unødvendige hindringer. DevOps-teamene bruker en rekke teknikker for å forbedre flyten, f.eks.:
+
+- Iterativ/Inkrementell utvikling: DevOps-teamene utvikler programvare i små, inkrementelle trinn(sprints). Dette gjør det mulig å levere funksjoner til kunden tidlig og ofte, og å få tilbakemeldinger som kan brukes til å forbedre programvaren
+- Automatisering: DevOps-teamene bruker automatisering for å redusere manuelle oppgaver og forbedre nøyaktigheten. Automatisering kan bidra til å forbedre flyten ved å gjøre det mulig å bygge, teste og distribuere programvare raskere og mer effektivt
+
+Feedback er et annet viktig prinsipp i DevOps. Feedback innebærer å samle inn tilbakemelding fra brukere og andre interessenter for å forbedre programvaren. DevOps-teamene bruker en rekke teknikker for å samle inn feedback, f.eks.:
+
+- Brukertesting: DevOps-teamene tester programvaren med brukere for å få tilbakemelding om hvordan den fungerer i praksis
+- Kundeundersøkelser: DevOps-teamene gjennomfører spørreundersøkelser med kunder for å få tilbakemelding om deres behov og ønsker
+- Statistikk: DevOps-teamene analyserer statistikk for å identifisere problemer og muligheter for forbedring
+
+Kontinuerlig forbedring er et tredje viktig prinsipp i DevOps. Kontinuerlig forbedring innebærer å kontinuerlig identifisere og løse problemer for å forbedre programvaren. DevOps-teamene bruker en rekke teknikker for å drive kontinuerlig forbedring, f.eks.:
+
+- Scrum: Scrum er et rammeverk for smidig utvikling som fokuserer på kontinuerlig forbedring
+- Kaizen: Kaizen er en japansk filosofi for kontinuerlig forbedring
+- Lean: Lean er et rammeverk for å forbedre effektiviteten og kvaliteten
 
 
 
