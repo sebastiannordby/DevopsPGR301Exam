@@ -46,12 +46,6 @@ resource "aws_cloudwatch_dashboard" "main" {
             "s3.download.image.size",
             "max",
             { "stat": "Maximum", "period": 300 }
-          ],
-          [
-            "${var.cloudwatch_namespace}",
-            "s3.download.image.size",
-            "sum",
-            { "stat": "Sum", "period": 300 }
           ]
         ],
         "region": "eu-west-1",
@@ -80,11 +74,6 @@ resource "aws_cloudwatch_dashboard" "main" {
             "${var.cloudwatch_namespace}",
             "s3.list.images.timer.max",
             { "stat": "Maximum", "period": 300 }
-          ],
-          [
-            "${var.cloudwatch_namespace}",
-            "s3.list.images.timer.sum",
-            { "stat": "Sum", "period": 300 }
           ]
         ],
         "region": "eu-west-1",

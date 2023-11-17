@@ -88,7 +88,7 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
      * @return
      */
     @GetMapping(value = "/download-image")
-    public ResponseEntity<StreamingResponseBody> downloadImage(
+    public ResponseEntity<byte[]> downloadImage(
         @RequestParam String bucketName,
         @RequestParam String imageName
     ) throws IOException {
@@ -103,14 +103,12 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
         var s3Object = s3Client
             .getObject(bucketName, imageName);
 
-        // Metrics: Register the size of the file.
-        distributionSummary.record(s3Object
-            .getObjectMetadata()
-            .getContentLength());
-
         var content = s3Object
             .getObjectContent()
             .readAllBytes();
+
+        // Metrics: Register the size of the file.
+        distributionSummary.record(content.length);
 
         logger.info(
             "bucketName=" + bucketName +
@@ -118,19 +116,9 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
             " mineType= " + mimeType +
             " size=" + content.length);
 
-        StreamingResponseBody stream = outputStream -> {
-            try (InputStream inputStream = s3Object.getObjectContent()) {
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    outputStream.write(buffer, 0, bytesRead);
-                }
-            }
-        };
-
         return ResponseEntity.ok()
             .contentType(MediaType.parseMediaType(mimeType))
-            .body(stream);
+            .body(content);
     }
 
     /**
