@@ -16,11 +16,11 @@ resource "aws_apprunner_service" "service" {
       image_configuration {
         port = var.apprunner_container_port
         runtime_environment_variables = {
-          "management.metrics.export.cloudwatch.namespace": var.cloudwatch_namespace,
-          "management.metrics.export.cloudwatch.batchSize": var.cloudwatch_batch_size,
-          "management.metrics.export.cloudwatch.step": var.cloudwatch_step,
-          "management.metrics.export.cloudwatch.enabled": var.cloudwatch_enabled,
-          "management.endpoints.web.exposure.include": "health,info,metrics"
+          "management.metrics.export.cloudwatch.namespace" = var.cloudwatch_namespace,
+          "management.metrics.export.cloudwatch.batchSize" = var.cloudwatch_batch_size,
+          "management.metrics.export.cloudwatch.step" = var.cloudwatch_step,
+          "management.metrics.export.cloudwatch.enabled" = var.cloudwatch_enabled,
+          "management.endpoints.web.exposure.include" = "health,info,metrics"
         }
       }
 
