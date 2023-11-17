@@ -50,3 +50,8 @@ variable "cloudwatch_enabled" {
   type = string
   default = "true"
 }
+
+variable "alert_email" {
+  description = "Email to alert when scanppe is going ham."
+  type = string
+}
