@@ -30,23 +30,23 @@ variable "apprunner_container_port" {
 
 variable "cloudwatch_namespace" {
   description = "CloudWatch namespace for metrics"
-  type        = string
+  type = string
 }
 
 variable "cloudwatch_batch_size" {
   description = "Batch size for CloudWatch metrics"
-  type        = number
-  default     = 20
+  type = string
+  default = "20"
 }
 
 variable "cloudwatch_step" {
   description = "Step size for CloudWatch metrics"
-  type        = string
-  default     = "1m"
+  type = string
+  default = "1m"
 }
 
 variable "cloudwatch_enabled" {
   description = "Enable CloudWatch metrics"
-  type        = bool
-  default     = true
+  type = string
+  default = "true"
 }
