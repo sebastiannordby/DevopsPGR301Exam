@@ -45,11 +45,12 @@ public class MetricsConfig {
     }
 
     private CloudWatchConfig setupCloudWatchConfig() {
-        CloudWatchConfig cloudWatchConfig = new CloudWatchConfig() {
+        System.out.println("cloudwatchNamespace: " + cloudwatchNamespace);
 
+        CloudWatchConfig cloudWatchConfig = new CloudWatchConfig() {
             private Map<String, String> configuration = Map.of(
                 "cloudwatch.namespace", 
-                cloudwatchNamespace,
+                "Kandidat2033Metrics",
                 "cloudwatch.step", 
                 Duration.ofSeconds(5).toString()
             );

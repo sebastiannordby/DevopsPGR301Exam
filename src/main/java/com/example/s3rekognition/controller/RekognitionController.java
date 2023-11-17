@@ -33,11 +33,11 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
     private final AmazonRekognition rekognitionClient;
     private final MeterRegistry meterRegistry;
 
-    private static final Logger logger = Logger.getLogger(RekognitionController.class.getName());
+    private static final Logger logger = 
+        Logger.getLogger(RekognitionController.class.getName());
 
-    public RekognitionController(
-        MeterRegistry meterRegistry
-    ) {
+    @Autowired
+    public RekognitionController(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
         this.s3Client = AmazonS3ClientBuilder
             .standard()
