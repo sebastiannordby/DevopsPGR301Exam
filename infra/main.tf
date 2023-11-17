@@ -20,29 +20,31 @@ resource "aws_apprunner_service" "service" {
       image_identifier = var.ecr_repository_uri
       image_repository_type = "ECR"
     }
-
-    environment_variables = [
-      {
-        name = "management.metrics.export.cloudwatch.namespace"
-        value = var.cloudwatch_namespace
-      },
-      {
-        name = "management.metrics.export.cloudwatch.batchSize"
-        value = var.cloudwatch_batch_size
-      },
-      {
-        name = "management.metrics.export.cloudwatch.step"
-        value = var.cloudwatch_step
-      },
-      {
-        name = "management.metrics.export.cloudwatch.enabled"
-        value = var.cloudwatch_enabled
-      },
-    ]  
-
+    
     auto_deployments_enabled = true
   }
+
+  runtime_environment_variables = [
+    {
+      name = "management.metrics.export.cloudwatch.namespace"
+      value = var.cloudwatch_namespace
+    },
+    {
+      name = "management.metrics.export.cloudwatch.batchSize"
+      value = var.cloudwatch_batch_size
+    },
+    {
+      name = "management.metrics.export.cloudwatch.step"
+      value = var.cloudwatch_step
+    },
+    {
+      name = "management.metrics.export.cloudwatch.enabled"
+      value = var.cloudwatch_enabled
+    }
+  ]
 }
+
+    
 
 resource "aws_iam_role" "role_for_apprunner_service" {
   name = var.apprunner_policy_name
