@@ -48,7 +48,7 @@ public class MetricsConfig {
         CloudWatchConfig cloudWatchConfig = new CloudWatchConfig() {
             private Map<String, String> configuration = Map.of(
                 "cloudwatch.namespace", 
-                cloudwatchNamespace
+                cloudwatchNamespace,
                 "cloudwatch.step", 
                 Duration.ofSeconds(5).toString()
             );
@@ -58,6 +58,7 @@ public class MetricsConfig {
                 return configuration.get(key);
             }
         };
+        
         return cloudWatchConfig;
     }
 }
