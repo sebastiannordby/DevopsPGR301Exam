@@ -594,3 +594,8 @@ Valget av metodikk avhenger av prosjektets mål, kompleksitet og krav til progra
 - DevOps: DevOps er ofte mest ideell for situasjoner der høy hastighet og automatisering er nødvendig. Det er spesielt gunstig for organisasjoner som ønsker å oppnå kontinuerlig levering og forbedre driftsstabilitet. DevOps er mer egnet for mer modne og stabile produkter
 
 Kombinasjon: I mange tilfeller kan en kombinasjon av Smidig og DevOps være mest effektiv, der Smidig brukes for programvareutvikling og kravhåndtering, mens DevOps benyttes for å automatisere leveransesiden for å oppnå raskere og mer pålitelige utgivelser
+
+
+# Oppsummering
+Alt i alt har det vært kjempegøy. Skulle kanskje ha fått med meg noen øvingstimer, ettersom jeg måtte finne ut alt underveis. 
+Hadde litt problematikk med de miljøvariablene, men ellers syntes jeg det har gått rimelig smertefritt. Kudos til Glenn for et utrolig gøy fag og morsomme forelesninger!
