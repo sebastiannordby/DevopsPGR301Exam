@@ -9,6 +9,7 @@ variable "alarm_email" {
 
 variable "name_prefix" {
   type = string
+  default = "2033alarm"
 }
 
 variable "metric_name" {

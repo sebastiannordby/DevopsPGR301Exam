@@ -7,7 +7,7 @@ resource "aws_cloudwatch_metric_alarm" "threshold" {
   evaluation_periods  = "1"
   period = "60"
   statistic = "Maximum"
-  alarm_description = "This alarm goes of"
+  alarm_description = "This alarm goes of if treshold exceed in a one minute period."
   alarm_actions = [aws_sns_topic.user_updates.arn]
 }
 
