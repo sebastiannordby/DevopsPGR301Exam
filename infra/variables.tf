@@ -35,20 +35,20 @@ variable "cloudwatch_namespace" {
 
 variable "cloudwatch_batch_size" {
   description = "Batch size for CloudWatch metrics"
-  type = string
-  default = "20"
+  type = number
+  default = 20
 }
 
 variable "cloudwatch_step" {
   description = "Step size for CloudWatch metrics"
   type = string
-  default = "1m"
+  default = "5s"
 }
 
 variable "cloudwatch_enabled" {
   description = "Enable CloudWatch metrics"
-  type = string
-  default = "true"
+  type = bool
+  default = true
 }
 
 variable "alert_email" {

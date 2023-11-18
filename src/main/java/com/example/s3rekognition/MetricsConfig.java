@@ -22,6 +22,15 @@ public class MetricsConfig {
     @Value("${management.metrics.export.cloudwatch.namespace}")
     private String cloudwatchNamespace;
 
+    @Value("${management.metrics.export.cloudwatch.batchSize}")
+    private int cloudwatchBatchSize;
+
+    @Value("${management.metrics.export.cloudwatch.step}")
+    private String cloudwatchStep;
+
+    @Value("${management.metrics.export.cloudwatch.enabled}")
+    private boolean cloudwatchEnabled;
+
     @Bean
     public CloudWatchAsyncClient cloudWatchAsyncClient() {
         return CloudWatchAsyncClient.builder()
@@ -45,14 +54,22 @@ public class MetricsConfig {
     }
 
     private CloudWatchConfig setupCloudWatchConfig() {
-        System.out.println("cloudwatchNamespace: " + cloudwatchNamespace);
+        System.out.println("CloudWatch Configuration: ");
+        System.out.println("\t-cloudwatchNamespace: " + cloudwatchNamespace);
+        System.out.println("\t-cloudwatchBatchSize: " + cloudwatchBatchSize);
+        System.out.println("\t-cloudwatchStep: " + cloudwatchStep);
+        System.out.println("\t-cloudwatchEnabled: " + cloudwatchEnabled);
 
         CloudWatchConfig cloudWatchConfig = new CloudWatchConfig() {
             private Map<String, String> configuration = Map.of(
                 "cloudwatch.namespace", 
                 cloudwatchNamespace,
+                "cloudwatch.batchSize", 
+                String.valueOf(cloudwatchBatchSize),
                 "cloudwatch.step", 
-                Duration.ofSeconds(5).toString()
+                cloudwatchStep,
+                "cloudwatch.enabled", 
+                String.valueOf(cloudwatchEnabled)                
             );
 
             @Override
