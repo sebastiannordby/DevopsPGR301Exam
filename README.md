@@ -77,7 +77,7 @@ HelloWorldFunction:
 ```
 
 ## Oppgave 1 - A - Resultat:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/17a20dd2-42dc-4771-b226-3ec510960d91)
+![image](img/curl_resultat_sam.png)
 
 ## Oppgave 1 - B
 Docker-filen jeg skrev later til å fungere og begge kommandoer oppgitt i oppgaven kjører, som vist i resultat.
@@ -102,7 +102,7 @@ CMD ["python", "./app.py"]
 ```
 
 ## Oppgave 1 - B - Resultat
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/8352b4d9-ba36-476b-9f10-0fac3805b887)
+![image](img/docker_run_resultat.png)
 
 # Oppgave 2
 [![Build and Push to AWS ECR](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml)
@@ -142,16 +142,16 @@ CMD ["java", "-jar", "app.jar"]
 ##Oppgave 2 - A - Resultat
 Kjøring av "docker build -t ppe .":
 
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/b857fa6e-9e8e-42f4-a105-ca806339d809)
+![image](img/oppgave_2_a_1.png)
 
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/13bb2811-3069-4108-9e4c-8540702d765d)
+![image](img/oppgave_2_a_2.png)
 
 Kjøring av "docker run -p 8080:8080 -e AWS_ACCESS_KEY_ID=XXX -e AWS_SECRET_ACCESS_KEY=YYY -e BUCKET_NAME=kjellsimagebucket ppe":
 
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/24848cef-807f-4c2a-9745-ed74e2df7421)
+![image](img/oppgave_2_a_3.png)
 
 Kjøring av "curl localhost:8080/scan-ppe?bucketName=kjellsimagebucket":
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/e59893f2-9afa-42c8-b88a-8a0abeda427d)
+![image](img/oppgave_2_a_4.png)
 
 ## Oppgave 2 - B
 
@@ -166,10 +166,10 @@ Det er også forhånds laget et Elastic Container Repository(ECR) med navn:
 [Commit'en har id d14dcab544268b3192fbc74487474159d8d98691](https://github.com/sebastiannordby/DevopsPGR301Exam/commit/d14dcab544268b3192fbc74487474159d8d98691).
 
 Kjøring av workflow:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/830d96eb-00b7-4920-9546-4ce26db11da3)
+![image](img/oppgave_2_b_1.png)
 
 Publisert til ECR og tagget med "latest" og hash for commit:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/6f5ef3fb-64a1-4f02-9196-aec3ffb77efb)
+![image](img/oppgave_2_b_1.png)
 
 # Oppgave 3
 For bygging i Github Actions trengs følgende secrets:
@@ -277,25 +277,25 @@ env:
 ```
 
 Litt motstand med å sette opp(fordi kloke meg kopierte uri til feil ECR), men det ordnet seg:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/076688de-864d-4023-9f7b-16f782edc36c)
+![image](img/oppgave_3_b_1.png)
 
 Etter deploy dukket instansen opp i AppRunner:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/ca6aec84-7ccc-411f-b31f-9bdca65f8984)
+![image](img/oppgave_3_b_2.png)
 
 Policien blir også opprettet:
 
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/ba4e2cb8-5a97-43ac-9506-7d1b506cc692)
+![image](img/oppgave_3_b_3.png)
 
 Endte opp meg å legge til S3 Full Access med Terraform, dette er vel strengt talt ikke nødvendig ettersom 
 du(Glenn) har laget en rolle(AppRunnerECRAccessRole) som implisitt allerede gjør dette:
 
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/3a2cae7c-78f4-4999-aba8-cf4acc958e8a)
+![image](img/oppgave_3_b_4.png)
 
 
 ## Oppgave 3 - Resultat:
 Kjører en "curl" kommando mot AppRunner fra Cloud9-miljøet og resultatet blir(drumroll): 
 
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/2d3bbc22-a6f1-4975-8420-8cf2b957c96a)
+![image](img/oppgave_3_resultat.png)
 
 # Oppgave 4 A
 For å gjøre oppsett av applikasjonen enklere, flyttet jeg Terraform variablene til egen fil ["variables.tf"](https://github.com/sebastiannordby/DevopsPGR301Exam/blob/main/infra/variables.tf).
@@ -374,21 +374,21 @@ Her valgte jeg Timer som metrikk rett og slett for å overvåke ytelse. Her kan 
 for lang tid på å eksekvere. En til fordel er at man kan se når hastighetsforskjeller i forhold til mengden brukere(hvis du har dette som metrikk),
 men også generelt for å ha statestikk på ytelse av tredjeparts tjenester.
 
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/6e011ecf-5342-42c3-b290-340ed365cb8a)
+![image](img/oppgave_4_a_1.png)
 
 Endepunkt for å laste ned bilde "{URL_APP_RUNNER}/download-image?bucketName=kjellsimagebucket&imageName=helmet.jpeg":
 Her valgte jeg DistributionSummary som metrikk. Jeg mener dette er en god metrikk for det å laste ned filer fordi man kan få 
 diverse statistikker som gjennomsnitt, maksimum, minimum av filstørrelsene. Ved å se på disse verdiene vet man da om man burde effektivisere koden, 
 kanskje streame over http i steden for å lese fra S3 og rett til minne, men også oppdage flaskehalser i forhold til filstørrelsene i forhold til ytelse på applikasjonen.
 
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/e70f3fe0-653e-48c4-bdf1-a1facd1b42c0)
+![image](img/oppgave_4_a_2.png)
 
 
 # Oppgave 4 - A - Resultat
 
 Et fungerende dashboard med navn "kandidat2033dashboard":
 
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/d63bc13f-5481-4922-9912-2f52ddcc605f)
+![image](img/oppgave_4_a_resultat.png)
 
 # Oppave 4 - B
 Definert en alarm under infra/alarm_module. 
@@ -459,10 +459,10 @@ module "alarm" {
 
 ## Oppgave 4 - B - Resultat
 Alarmen kommer opp i CloudWatch:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/66018f74-06b1-4059-8a33-3aaa42a7685b)
+![image](img/oppgave_4_resultat_b_1.png)
 
 Mottar e-post for abonnering på alarm:
-![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/1e10b379-72bd-49d4-870c-09fbf568a5ea)
+![image](img/oppgave_4_resultat_b_2.png)
 
 # Oppgave 5
 
