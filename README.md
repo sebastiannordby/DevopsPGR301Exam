@@ -1,5 +1,28 @@
 # DevopsPGR301Exam
 
+For å kjøre dette prosjektet må følgende secrets legges inn i Github:
+- AWS_ACCESS_KEY_ID (Lages i IAM)
+- AWS_SECRET_ACCESS_KEY (Lages i IAM)
+
+Resten av konfigureringen i forhold til applikasjonen for Java applikasjonen kan gjøres i "aws_deploy_ecr.yml",
+under steget "Terraform Apply":
+```
+******
+TF_VAR_iam_policy_name: kandidat2033polly
+TF_VAR_ecr_repository_uri: 244530008913.dkr.ecr.eu-west-1.amazonaws.com/kandidat2033ecr:latest
+TF_VAR_apprunner_container_port: 8080
+TF_VAR_apprunner_service_name: kandidat2033apprunr
+TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
+TF_VAR_dashboard_name: kandidat2033dashboard
+TF_VAR_cloudwatch_namespace: Kandidat2033Metrics
+TF_VAR_cloudwatch_batchSize: 20
+TF_VAR_cloudwatch_step: 5s
+TF_VAR_cloudwatch_enabled: true
+TF_VAR_alert_email: sebastianbjornstad@hotmail.com
+******
+```
+
+
 # Oppgave 1
 
 ## Oppgave 1 - A 
@@ -486,7 +509,7 @@ flow teamet velger.
 
 **Scrum/Smidig Metodikk**
 
-Scrum er veldig populært for programvareutvikling, men det er egentlig et rammeverk for produktutvikling, og programvareutvikling faller under dette. Scrum er basert på korte iterasjoner/sykluser som er kalt for sprints. En sprint varer som regel i 1-4 uker. Formålet med en sprint er å levere et fungerende produkt, ved å sørge for å fullføre de delene som er planlagt for denne sprinten.
+Scrum er veldig populært for programvareutvikling, men det er opprinnelig et rammeverk for produktutvikling, der programvareutvikling faller under dette. Scrum er basert på korte iterasjoner/sykluser som er kalt for sprints. En sprint varer som regel i 1-4 uker. Formålet med en sprint er å levere et fungerende produkt, ved å sørge for å fullføre de delene som er planlagt for denne sprinten.
 
 I forhold til programvareutvikling er scrum basert på en håndfull prinsipper:
 - Fokus på kunden: Produktets behov og prioritering av funksjoner som skal utvikles i forhold til dette
@@ -505,7 +528,7 @@ Selvom det er noen humper i veien er det også en del styrker, f.eks.:
 - Effektivitet og produktivitet: Ettersom teamet selv er ansvarlig for planlegging, gjennomføring og evaluering kan dette bidra til økt produktivitet, som også som regel kommer med økt effektivitet
 
 **DevOps Metodikk**
-De grunnleggende prinsippene i DevOps er: flyt, feedback og kontinuerlig forbedring.
+De grunnleggende prinsippene i DevOps er: *flyt, feedback og kontinuerlig forbedring*.
 
 Flyt er et viktig prinsipp i DevOps. Flyt innebærer å levere programvare raskt og effektivt, uten unødvendige hindringer. DevOps-teamene bruker en rekke teknikker for å forbedre flyten, f.eks.:
 
@@ -525,5 +548,49 @@ Kontinuerlig forbedring er et tredje viktig prinsipp i DevOps. Kontinuerlig forb
 - Lean: Lean er et rammeverk for å forbedre effektiviteten og kvaliteten
 
 
+Selvom DevOps metodikk kommer med sine fordeler, kan det også ha sine ulemper og utfordringer. 
 
+*Fordeler*:
+- Raskere levering av programvare: Ved å automatisere utviklings- og distribusjonsprosesser kan teamene levere nye funksjoner og oppdateringer raskere
 
+- Forbedret samarbeid: Metodikken fremmer samarbeid mellom utviklingsteamene og driftsteamene. Dette hjelper til med å forbedre kommunikasjonen mellom teamene, noe som igjen fører til bedre forståelse og samarbeid
+
+- Kvalitetssikring: Automatisert testing og kontinuerlig integrasjon bidrar til å oppdage feil tidlig i utviklingsprosessen. En effekt av dette er bedre kvalitet på programvaren og reduserer kostnadene og kompleksiteten knyttet til feilretting senere
+
+- Skalerbarhet og fleksibilitet: DevOps gir en plattform for å automatisere skalering og oppsett. Dette gjør det enklere å håndtere varierende arbeidsbelastninger og skalere ressursene etter behov
+
+- Kontinuerlig overvåking og forbedring: DevOps legger vekt på kontinuerlig overvåking av programvare. Dette gjør det mulig å oppdage ytelsesproblemer og feil i sanntid og raskt gjøre forbedringer
+
+*Ulemper/Utfordringer*:
+Kulturelle utfordringer: Å implementere DevOps krever ofte en kulturell endring i organisasjonen. Som med Scrum kan det være motstand blant ansatte som er vandt med å jobbe i samme rutiner over mange år
+
+Kompleksitet: Verktøy og infrastrutur kan være komplekse å sette opp og administrere. Å finne riktig kombinasjon av verktøy og integrere dem effektivt kan være utfordrende
+
+Sikkerhet og overholdelse: Automatisering og rask utvikling kan føre til at sikkerhet og overholdelse blir ignorert eller glemt. Det er viktig å integrere sikkerhet i hele "DevOps-løpet" for å unngå sårbarheter
+
+Kostnader: Implementering av DevOps kan medføre investeringer i infrastruktur og opplæring. Mens det på lang sikt kan føre til kostnadsbesparelser, kan de initielle kostnadene være betydelige for enkelte organisasjoner
+
+Feilsøking og feilretting: I en kompleks DevOps-miljø kan feilsøking og feilretting være utfordrende. Å finne kilden til problemer kan være tidkrevende og kreve spesialisert kompetanse. Man må da sørge for at flere besitter denne kompetansen hvis feil skulle oppstå.
+
+**Sammenligning og Kontrast**
+*Scrum/Smidig*:
+
+- Programvarekvalitet: Scrum/Smidig fremmer iterativ utvikling og tett samarbeid med kunder og andre parter av interesse. Dette kan føre til bedre forståelse av krav og rask tilbakemelding, som bidrar til å forbedre programvarekvaliteten over tid. Automatisert testing og kontinuerlig integrasjon (CI) er også vanlige i Smidig-utvikling, noe som styrker kvalitetskontrollen på programvaren
+
+- Leveransetempo: Smidig tilbyr hyppige utgivelser av funksjoner, noe som kan øke tempo av leveranse. Imidlertid kan tidsrammene variere avhengig av iterasjonens lengde og kompleksiteten til funksjonene/programvaren
+
+*DevOps*:
+
+- Programvarekvalitet: DevOps automatiserer hele programvareleveranseprosessen, inkludert testing og distribusjon. Dette fører til mer pålitelig programvarekvalitet da menneskelige feil og variasjoner i prosessen reduseres. Kontinuerlig overvåking og rask feilretting bidrar også til å opprettholde høy kvalitet
+
+- Leveransetempo: DevOps er sterkt fokusert på rask og hyppig programvarelevering. Automatisering av prosesser, inkludert infrastrukturprovisjonering og implementering, gjør det mulig å akselerere leveringstiden betydelig. Dette gjør at DevOps ofte gir enda høyere leveransetempo sammenlignet med Smidig
+
+Utviklingssituasjoner:
+
+Valget av metodikk avhenger av prosjektets mål, kompleksitet og krav til programvareutvikling og levering. Har oppsummert grunner for Smidig og Devops under, men også lagt til et punkt der man kombinerer disse.
+
+- Smidig: Smidig er ofte mer egnet for situasjoner der kravene er usikre eller endres hyppig. Det er spesielt verdifullt for prosjekter der kundens tilbakemelding og behov er viktig for programvareutviklingen. Smidig gir muligheten til å tilpasse seg endringer raskt
+
+- DevOps: DevOps er ofte mest ideell for situasjoner der høy hastighet og automatisering er nødvendig. Det er spesielt gunstig for organisasjoner som ønsker å oppnå kontinuerlig levering og forbedre driftsstabilitet. DevOps er mer egnet for mer modne og stabile produkter
+
+Kombinasjon: I mange tilfeller kan en kombinasjon av Smidig og DevOps være mest effektiv, der Smidig brukes for programvareutvikling og kravhåndtering, mens DevOps benyttes for å automatisere leveransesiden for å oppnå raskere og mer pålitelige utgivelser
