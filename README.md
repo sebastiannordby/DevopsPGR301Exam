@@ -367,6 +367,79 @@ Et fungerende dashboard med navn "kandidat2033dashboard":
 
 ![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/d63bc13f-5481-4922-9912-2f52ddcc605f)
 
+# Oppave 4 - B
+Definert en alarm under infra/alarm_module. 
+Alarmen skal gå av hvis scan-ppe blir kalt mer enn 5 ganger innen en tidsperiode på 1 minutt.
+
+main.tf:
+
+```
+resource "aws_cloudwatch_metric_alarm" "threshold" {
+  alarm_name = "${var.name_prefix}-threshold"
+  namespace = var.cloudwatch_namespace
+  metric_name = var.metric_name
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  threshold = var.threshold
+  evaluation_periods  = "1"
+  period = "60"
+  statistic = "Maximum"
+  alarm_description = "This alarm goes of if treshold exceed in a one minute period."
+  alarm_actions = [aws_sns_topic.user_updates.arn]
+}
+
+resource "aws_sns_topic" "user_updates" {
+  name = "${var.name_prefix}-alarm-topic"
+}
+
+resource "aws_sns_topic_subscription" "user_updates_sqs_target" {
+  topic_arn = aws_sns_topic.user_updates.arn
+  protocol = "email"
+  endpoint = var.alarm_email
+}
+```
+
+Med følgende variabler "variables.tf":
+```
+variable "threshold" {
+  default = "50"
+  type = string
+}
+
+variable "alarm_email" {
+  type = string
+}
+
+variable "name_prefix" {
+  type = string
+  default = "2033alarm"
+}
+
+variable "metric_name" {
+  type = string
+}
+
+variable "cloudwatch_namespace" {
+  type = string
+}
+```
+Henter inn modulen i dashboardet "dashboard.tf":
+```
+module "alarm" {
+  source = "./alarm_module"
+  alarm_email = var.alert_email
+  name_prefix = "scan-ppe-count-2033"
+  metric_name = "scan_ppe.count"
+  threshold = 5
+  cloudwatch_namespace = var.cloudwatch_namespace
+}
+```
+
+## Oppgave 4 - B - Resultat
+Alarmen kommer opp i CloudWatch:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/66018f74-06b1-4059-8a33-3aaa42a7685b)
+
+Mottar e-post for abonnering på alarm:
+![image](https://github.com/sebastiannordby/DevopsPGR301Exam/assets/24465003/1e10b379-72bd-49d4-870c-09fbf568a5ea)
 
 # Oppgave 5
 
