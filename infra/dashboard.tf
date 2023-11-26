@@ -77,6 +77,34 @@ resource "aws_cloudwatch_dashboard" "main" {
         "title": "Image Listing Metrics"
       }
     }
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 12,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          [
+            "${var.cloudwatch_namespace}",
+            "analyze.images.timer",
+            { "stat": "Average", "period": 300 }
+          ],
+          [
+            "${var.cloudwatch_namespace}",
+            "analyze.images.timer",
+            { "stat": "Sum", "period": 300 }
+          ],
+          [
+            "${var.cloudwatch_namespace}",
+            "analyze.images.timer",
+            { "stat": "Maximum", "period": 300 }
+          ]
+        ],
+        "region": "eu-west-1",
+        "title": "Analyzing Images Metrics"
+      }
+    }
   ]
 }
 DASHBOARD
