@@ -1,5 +1,4 @@
 package com.example.s3rekognition.controller;
-
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.rekognition.model.*;
@@ -9,6 +8,7 @@ import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.example.s3rekognition.PPEClassificationResponse;
 import com.example.s3rekognition.PPEResponse;
+import com.example.s3rekognition.results.ImageAnalysisResponse;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 @RestController
 public class RekognitionController implements ApplicationListener<ApplicationReadyEvent> {
@@ -189,6 +187,56 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
     }
 
     /**
+     * This endpoint takes an S3 bucket name in as an argument, scans all the
+     * images and returns labels describing objects in the image.
+     * <p>
+     *
+     * @param bucketName
+     * @return
+     */
+    @GetMapping(
+        value = "/analyze-images",
+        produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<List<ImageAnalysisResponse>> analyzeImagesFromBucket(
+        @RequestParam String bucketName
+    ) {
+        var timer = meterRegistry.timer("analyze.images.timer");
+
+        return timer.record(() -> {
+            ListObjectsV2Result imageList = s3Client.listObjectsV2(bucketName);
+            List<ImageAnalysisResponse> analysisResponses = new ArrayList<>();
+            List<S3ObjectSummary> images = imageList.getObjectSummaries();
+
+            for (S3ObjectSummary image : images) {
+                logger.info("Analyzing " + image.getKey());
+
+                DetectLabelsRequest request = new DetectLabelsRequest()
+                    .withImage(new Image()
+                        .withS3Object(new S3Object()
+                            .withBucket(bucketName)
+                            .withName(image.getKey())))
+                    .withMaxLabels(10)
+                    .withMinConfidence(80f);
+
+                DetectLabelsResult result = rekognitionClient.detectLabels(request);
+
+                List<String> labels = result.getLabels().stream()
+                        .map(Label::getName)
+                        .collect(Collectors.toList());
+
+                ImageAnalysisResponse analysisResponse = new ImageAnalysisResponse(
+                        image.getKey(),
+                        labels);
+
+                analysisResponses.add(analysisResponse);
+            }
+
+            return ResponseEntity.ok(analysisResponses);
+        });
+    }
+
+    /**
      * Detects if the image has a protective gear violation for the FACE bodypart-
      * It does so by iterating over all persons in a picture, and then again over
      * each body part of the person. If the body part is a FACE and there is no
@@ -203,7 +251,6 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
                 .anyMatch(bodyPart -> bodyPart.getName().equals("FACE")
                         && bodyPart.getEquipmentDetections().isEmpty());
     }
-
 
     /**
      * Takes a fileName and returns the MimeType
@@ -230,7 +277,6 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
                 return "application/octet-stream";
         }
     }
-
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
