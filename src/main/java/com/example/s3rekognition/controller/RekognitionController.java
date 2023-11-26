@@ -198,7 +198,7 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
         value = "/analyze-images",
         produces = "application/json")
     @ResponseBody
-    public ResponseEntity<List<ImageAnalysisResponse>> analyzeImagesFromBucket(
+    public List<ImageAnalysisResponse> analyzeImagesFromBucket(
         @RequestParam String bucketName
     ) {
         var timer = meterRegistry.timer("analyze.images.timer");
@@ -232,7 +232,7 @@ public class RekognitionController implements ApplicationListener<ApplicationRea
                 analysisResponses.add(analysisResponse);
             }
 
-            return ResponseEntity.ok(analysisResponses);
+            return analysisResponses;
         });
     }
 
