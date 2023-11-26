@@ -87,17 +87,17 @@ resource "aws_cloudwatch_dashboard" "main" {
         "metrics": [
           [
             "${var.cloudwatch_namespace}",
-            "analyze.images.timer",
+            "analyze.images.timer.avg",
             { "stat": "Average", "period": 300 }
           ],
           [
             "${var.cloudwatch_namespace}",
-            "analyze.images.timer",
+            "analyze.images.timer.sum",
             { "stat": "Sum", "period": 300 }
           ],
           [
             "${var.cloudwatch_namespace}",
-            "analyze.images.timer",
+            "analyze.images.timer.max",
             { "stat": "Maximum", "period": 300 }
           ]
         ],
