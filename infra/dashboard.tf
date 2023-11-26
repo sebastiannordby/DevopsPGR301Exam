@@ -76,7 +76,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         "region": "eu-west-1",
         "title": "Image Listing Metrics"
       }
-    }
+    },
     {
       "type": "metric",
       "x": 0,
