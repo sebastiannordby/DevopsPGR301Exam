@@ -316,7 +316,6 @@ lifecycle {
 
 De nye variablene er følgende:
 ```
-```
 *****
 variable "cloudwatch_namespace" {
   description = "CloudWatch namespace for metrics"
@@ -341,7 +340,6 @@ variable "cloudwatch_enabled" {
   default = "true"
 }
 ```
-```
 
 Alle variablene kan da settes i steget "Terraform Apply":
 ```
@@ -365,18 +363,28 @@ Alle variablene kan da settes i steget "Terraform Apply":
 
 Testing av nye endepunkter:
 
+### Endepunkter med AWS Reco:
+
 Endepunkt for å gjøre PPE Scan:
 Her valgte jeg Counter som metrikk. Dette for å få statistikk på hvor mange ganger denne funksjonen kjører. Statistikken kan brukes til å vurdere optimaliseringer.
 Kanskje endepunktet blir kjørt mange ganger og man skulle ha cashet resultatene innenfor en viss periode, eller lignende.
 
-Endepunkt for å liste inneholdet i en bøtte("curl {URL_APP_RUNNER}/list-images?bucketName=kjellsimagebucket):
+Endepunkt for å analysere bilder med kjennetegn ("curl {URL_APP_RUNNER}/analyze-images?bucketName=kjellsimagebucket") (NYTT):
 Her valgte jeg Timer som metrikk rett og slett for å overvåke ytelse. Her kan man da sette opp varslinger hvis endepunktet skulle bruke 
 for lang tid på å eksekvere. En til fordel er at man kan se når hastighetsforskjeller i forhold til mengden brukere(hvis du har dette som metrikk),
 men også generelt for å ha statestikk på ytelse av tredjeparts tjenester.
 
+![image](img/rres_endepunkt_reko_2.png)
+
+
+### Endepunkter med S3 Buckets:
+
+Endepunkt for å liste inneholdet i en bøtte("curl {URL_APP_RUNNER}/list-images?bucketName=kjellsimagebucket)(NYTT):
+Her valgte jeg Timer for samme grunn som "Endepunkt for å analysere bilder med kjennetegn"-
+
 ![image](img/oppgave_4_a_1.png)
 
-Endepunkt for å laste ned bilde "{URL_APP_RUNNER}/download-image?bucketName=kjellsimagebucket&imageName=helmet.jpeg":
+Endepunkt for å laste ned bilde "{URL_APP_RUNNER}/download-image?bucketName=kjellsimagebucket&imageName=helmet.jpeg" (NYTT):
 Her valgte jeg DistributionSummary som metrikk. Jeg mener dette er en god metrikk for det å laste ned filer fordi man kan få 
 diverse statistikker som gjennomsnitt, maksimum, minimum av filstørrelsene. Ved å se på disse verdiene vet man da om man burde effektivisere koden, 
 kanskje streame over http i steden for å lese fra S3 og rett til minne, men også oppdage flaskehalser i forhold til filstørrelsene i forhold til ytelse på applikasjonen.
