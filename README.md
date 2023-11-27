@@ -167,7 +167,7 @@ For bygging i Github Actions trengs følgende secrets:
 Det er også forhånds laget et Elastic Container Repository(ECR) med navn:
 [kandidat2033ecr](https://eu-west-1.console.aws.amazon.com/ecr/repositories/private/244530008913/kandidat2033ecr?region=eu-west-1)
 
-##Oppgave 2 - B - Resultat
+## Oppgave 2 - B - Resultat
 [Commit'en har id d14dcab544268b3192fbc74487474159d8d98691](https://github.com/sebastiannordby/DevopsPGR301Exam/commit/d14dcab544268b3192fbc74487474159d8d98691).
 
 Kjøring av workflow:
@@ -281,9 +281,6 @@ env:
   TF_VAR_apprunner_policy_name: kandidat2033apprunpolly
 ```
 
-Litt motstand med å sette opp(fordi kloke meg kopierte uri til feil ECR), men det ordnet seg:
-![image](img/oppgave_3_b_1.png)
-
 Etter deploy dukket instansen opp i AppRunner:
 ![image](img/oppgave_3_b_2.png)
 
@@ -346,7 +343,7 @@ variable "cloudwatch_enabled" {
 }
 ```
 
-Alle variablene kan da settes i steget "Terraform Apply":
+Alle variablene kan og må da settes i steget "Terraform Apply":
 ```
 *****
 - name: Terraform Apply
@@ -366,42 +363,36 @@ Alle variablene kan da settes i steget "Terraform Apply":
 *****
 ```
 
-Testing av nye endepunkter:
+# Oppgave 4 - A - Resultat
 
-### Endepunkter med AWS Reco:
+Introdusert tre nye endepunkter:
 
-Endepunkt for å gjøre PPE Scan:
-Her valgte jeg Counter som metrikk. Dette for å få statistikk på hvor mange ganger denne funksjonen kjører. Statistikken kan brukes til å vurdere optimaliseringer.
-Kanskje endepunktet blir kjørt mange ganger og man skulle ha cashet resultatene innenfor en viss periode, eller lignende.
-
-Endepunkt for å analysere bilder med kjennetegn ("curl {URL_APP_RUNNER}/analyze-images?bucketName=kjellsimagebucket") (NYTT):
-Her valgte jeg Timer som metrikk rett og slett for å overvåke ytelse. Her kan man da sette opp varslinger hvis endepunktet skulle bruke 
-for lang tid på å eksekvere. En til fordel er at man kan se når hastighetsforskjeller i forhold til mengden brukere(hvis du har dette som metrikk),
-men også generelt for å ha statestikk på ytelse av tredjeparts tjenester.
-
-![image](img/res_endepunkt_reko_2.png)
-
-
-### Endepunkter med S3 Buckets:
-
-Endepunkt for å liste inneholdet i en bøtte("curl {URL_APP_RUNNER}/list-images?bucketName=kjellsimagebucket)(NYTT):
-Her valgte jeg Timer for samme grunn som "Endepunkt for å analysere bilder med kjennetegn"-
+listImages: Dette endepunktet tar inn navnet på en S3-bøtte som parameter og returnerer en liste over innholdet i den angitte bøtten. Den bruker Amazon S3-tjenesten til å liste opp objekter i bøtten og returnerer en liste med nøklene til objektene. Her valgte jeg Timer for samme grunn som "Endepunkt for å analysere bilder med kjennetegn"-
 
 ![image](img/oppgave_4_a_1.png)
 
-Endepunkt for å laste ned bilde "{URL_APP_RUNNER}/download-image?bucketName=kjellsimagebucket&imageName=helmet.jpeg" (NYTT):
-Her valgte jeg DistributionSummary som metrikk. Jeg mener dette er en god metrikk for det å laste ned filer fordi man kan få 
+downloadImage: Dette endepunktet tar inn navnet på en S3-bøtte og navnet på en bildefil i bøtten som parametere. Det bruker Amazon S3-tjenesten til å laste ned bildet fra bøtten og returnerer bildedataen som en HTTP-respons med riktig MIME-type. Her valgte jeg DistributionSummary som metrikk. Jeg mener dette er en god metrikk for det å laste ned filer fordi man kan få 
 diverse statistikker som gjennomsnitt, maksimum, minimum av filstørrelsene. Ved å se på disse verdiene vet man da om man burde effektivisere koden, 
 kanskje streame over http i steden for å lese fra S3 og rett til minne, men også oppdage flaskehalser i forhold til filstørrelsene i forhold til ytelse på applikasjonen.
 
 ![image](img/oppgave_4_a_2.png)
 
+analyzeImagesFromBucket: Dette endepunktet tar inn navnet på en S3-bøtte som parameter og analyserer bildene i bøtten ved å bruke Amazon Rekognition-tjenesten til å oppdage og returnere etiketter som beskriver objekter i hvert bilde. Her valgte jeg Timer som metrikk rett og slett for å overvåke ytelse. Her kan man da sette opp varslinger hvis endepunktet skulle bruke 
+for lang tid på å eksekvere. En til fordel er at man kan se når hastighetsforskjeller i forhold til mengden brukere(hvis du har dette som metrikk),
+men også generelt for å ha statestikk på ytelse av tredjeparts tjenester.
 
-# Oppgave 4 - A - Resultat
+![image](img/res_endepunkt_reko_2.png)
+
+Lagt til metrikk på eksisterende endepunkt:
+
+Endepunkt for å gjøre PPE Scan:
+Her valgte jeg Counter som metrikk. Dette for å få statistikk på hvor mange ganger denne funksjonen kjører. Statistikken kan brukes til å vurdere optimaliseringer.
+Kanskje endepunktet blir kjørt mange ganger og man skulle ha cashet resultatene innenfor en viss periode, eller lignende.
 
 Et fungerende dashboard med navn "kandidat2033dashboard":
 
 ![image](img/oppgave_4_a_resultat.png)
+
 
 # Oppave 4 - B
 Definert en alarm under infra/alarm_module. 
