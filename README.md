@@ -1,5 +1,8 @@
 # DevopsPGR301Exam
 
+[![Publish Python AWS SAM](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml)
+[![Build and Push to AWS ECR](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml)
+
 For å kjøre dette prosjektet må følgende secrets legges inn i Github:
 - AWS_ACCESS_KEY_ID (Lages i IAM)
 - AWS_SECRET_ACCESS_KEY (Lages i IAM)
@@ -374,7 +377,7 @@ Her valgte jeg Timer som metrikk rett og slett for å overvåke ytelse. Her kan 
 for lang tid på å eksekvere. En til fordel er at man kan se når hastighetsforskjeller i forhold til mengden brukere(hvis du har dette som metrikk),
 men også generelt for å ha statestikk på ytelse av tredjeparts tjenester.
 
-![image](img/rres_endepunkt_reko_2.png)
+![image](img/res_endepunkt_reko_2.png)
 
 
 ### Endepunkter med S3 Buckets:
