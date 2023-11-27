@@ -174,7 +174,7 @@ Kjøring av workflow:
 ![image](img/oppgave_2_b_1.png)
 
 Publisert til ECR og tagget med "latest" og hash for commit:
-![image](img/oppgave_2_b_1.png)
+![image](img/oppgave_2_b_2.png)
 
 # Oppgave 3
 For bygging i Github Actions trengs følgende secrets:
