@@ -3,12 +3,14 @@
 [![Publish Python AWS SAM](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml)
 [![Build and Push to AWS ECR](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml)
 
-For å kjøre dette prosjektet må følgende secrets legges inn i Github:
+## Konfigurering av Github
+**For alle oppgavene i dette prosjektet må følgende secrets legges inn i Github:**
 - AWS_ACCESS_KEY_ID (Lages i IAM)
 - AWS_SECRET_ACCESS_KEY (Lages i IAM)
 
-Resten av konfigureringen i forhold til applikasjonen for Java applikasjonen kan gjøres i "aws_deploy_ecr.yml",
-under steget "Terraform Apply":
+## Konfigurering av Java applikasjonen
+**Resten av konfigureringen i forhold til applikasjonen for Java applikasjonen kan gjøres i "aws_deploy_ecr.yml",
+under steget "Terraform Apply":**
 ```
 ******
 TF_VAR_iam_policy_name: kandidat2033polly
