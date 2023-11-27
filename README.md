@@ -1,4 +1,4 @@
-# DevopsPGR301Exam
+# DevopsPGR301Exam - Kandidat 2033
 
 [![Publish Python AWS SAM](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml)
 [![Build and Push to AWS ECR](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml)
