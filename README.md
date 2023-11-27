@@ -608,5 +608,4 @@ Kombinasjon: I mange tilfeller kan en kombinasjon av Smidig og DevOps være mest
 
 
 # Oppsummering
-Alt i alt har det vært kjempegøy. Skulle kanskje ha fått med meg noen øvingstimer, ettersom jeg måtte finne ut alt underveis. 
-Hadde litt problematikk med de miljøvariablene, men ellers syntes jeg det har gått rimelig smertefritt. Kudos til Glenn for et utrolig gøy fag og morsomme forelesninger!
+Alt i alt har det vært kjempegøy. Hadde litt problematikk med de miljøvariablene, men ellers syntes jeg det har gått rimelig smertefritt. Kudos til Glenn for et utrolig gøy fag og morsomme forelesninger!
