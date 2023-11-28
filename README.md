@@ -656,6 +656,14 @@ Valget av metodikk avhenger av prosjektets mål, kompleksitet og krav til progra
 
 Kombinasjon: I mange tilfeller kan en kombinasjon av Smidig og DevOps være mest effektiv, der Smidig brukes for programvareutvikling og kravhåndtering, mens DevOps benyttes for å automatisere leveransesiden for å oppnå raskere og mer pålitelige utgivelser
 
+## Oppgave 5 C
+Å innføre en ny funksjonalitet i en applikasjon krever en nøye tilnærming til feedback for å sikre at den møter brukernes behov. Først ville jeg implementert funksjonaliteten i en begrenset, kontrollert miljø, muligens gjennom feature toggling, for å samle innledende tilbakemeldinger fra en liten gruppe brukere. Dette kan kombineres med A/B-testing(splittesting) for å sammenligne den nye funksjonaliteten med den eksisterende løsningen.
+
+For å forstå brukeropplevelsen og samle verdifull innsikt, ville jeg brukt brukerundersøkelser og analysert brukeratferd gjennom verktøy som Google Analytics eller Heatmaps. Deretter ville jeg overvåket applikasjonens ytelse og stabilitet med CloudWatch-metrikk og alarmsystemer for å identifisere og adressere eventuelle tekniske problemer raskt.
+
+Ved å integrere disse feedback mekanismene i CI/CD-pipeline, kan eventuelle feil eller forbedringsmuligheter identifiseres og håndteres umiddelbart. Dette inkluderer automatisk testing og kvalitetssikring ved hver utviklingssyklus.
+
+Til slutt, ved å etablere en kontinuerlig feedback-loop, kan man justere funksjonaliteten basert på faktisk brukeratferd og preferanser, noe som bidrar til kontinuerlig forbedring av applikasjonen. Denne prosessen understreker viktigheten av feedback fra bruker i alle stadier av utviklingslivssyklusen, fra konseptualisering til utrulling og videre iterasjoner av programvaren.
 
 # Oppsummering
 Alt i alt har det vært kjempegøy. Hadde litt problematikk med de miljøvariablene, men ellers syntes jeg det har gått rimelig smertefritt. Kudos til Glenn for et utrolig gøy fag og morsomme forelesninger!
