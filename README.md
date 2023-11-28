@@ -10,7 +10,7 @@ Har valgt å legge inn denne seksjonen i stedenfor å repetere det i hver indivi
 - AWS_ACCESS_KEY_ID (Lages i IAM)
 - AWS_SECRET_ACCESS_KEY (Lages i IAM)
 
-## Konfigurering av Python
+## Konfigurering av Python applikasjonen
 - Navn på bøtte kan endres i [/kjell/template.yml](https://github.com/sebastiannordby/DevopsPGR301Exam/blob/main/kjell/template.yml)
 - Annen konfigurering i forhold til stack osv, kan endres i [/.github/workflows/aws_sam_python.yml](https://github.com/sebastiannordby/DevopsPGR301Exam/blob/main/.github/workflows/aws_sam_python.yml)
 
