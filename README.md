@@ -10,7 +10,7 @@
 
 ## Konfigurering av Java applikasjonen
 **Resten av konfigureringen i forhold til applikasjonen for Java applikasjonen kan gjøres i "aws_deploy_ecr.yml",
-under steget "Terraform Apply":**
+under steget "Terraform Apply" ved bruk av Github Actions:**
 ```
 ******
 TF_VAR_iam_policy_name: kandidat2033polly
@@ -34,6 +34,9 @@ TF_VAR_alert_email: sebastianbjornstad@hotmail.com
 
 [![Publish Python AWS SAM](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml)
 
+<details>
+    <summary>Detaljer</summary>
+
 Følgende secrets må være konfigurert for å kjøre workflow:
 - AWS_ACCESS_KEY_ID (Lages i IAM)
 - AWS_SECRET_ACCESS_KEY (Lages i IAM)
@@ -50,7 +53,9 @@ except KeyError:
 ****** 
 ```
 
-Gjort om så SAM kan bruke S3 bøtten som er beskrevet i "template.yml":
+SAM bruker S3 bøtten som er beskrevet i "template.yml", la til policy for lesing av bøtten 
+og måtte skru opp "Timeout" grunnet rett og slett timeout:
+
 ```
 ******
 Environment:
@@ -59,8 +64,6 @@ Environment:
 ******      
 ```
 
-Fikk publisert til Sam, men fikk en "Internal Server Error", gikk så til CloudWatch for å se om jeg fant noen logg, og det gjorde jeg.. Jeg glemte jo å gi tilgang til S3 bøtten med bilder.
-Så jeg la til det i policies for funksjonen :
 ```
 ******      
 Policies:
@@ -70,23 +73,28 @@ Policies:
 ******      
 ```
 
-Fikk fortsatt "Internal Server Error", men prøvde så å teste Gatway'en via AWS Gateway API og fant følgende feilmelding:
-"Wed Nov 15 14:05:05 UTC 2023 : Endpoint response body before transformations: {"errorMessage":"2023-11-15T14:05:05.017Z 30400a8b-8eab-47e5-a4f4-22473f201533 Task timed out after 3.01 seconds"}"
-
-Prøver da følgende i "template.yml"
 ```
 HelloWorldFunction:
     Type: AWS::Serverless::Function 
     Properties:
         Timeout: 60 # Timeout for function
 ```
+</details>
 
-## Oppgave 1 - A - Resultat:
-![image](img/curl_resultat_sam.png)
+<details>
+    <summary>Resultat</summary>
+
+En curl kommando fra Cloud9 terminalen til SAM:
+
+![image](./img/curl_resultat_sam.png)
+</details>
 
 ## Oppgave 1 - B
-Docker-filen jeg skrev later til å fungere og begge kommandoer oppgitt i oppgaven kjører, som vist i resultat.
-Slik ser Docker-filen ut:
+
+<details>
+    <summary>Detaljer</summary>
+
+Slik ser Docker-filen ut(kommentarer på norsk til minne om kjell):
 
 ```
 FROM python:3.9-slim
@@ -104,17 +112,25 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 CMD ["python", "./app.py"]
-```
+```    
+</details>
 
-## Oppgave 1 - B - Resultat
+<details>
+    <summary>Resultat</summary>
+    
 ![image](img/docker_run_resultat.png)
+</details>
 
 # Oppgave 2
 [![Build and Push to AWS ECR](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml)
 
 ## Oppgave 2 - A
-Dockerfile'n later til å fungere og begge kommandoer oppgitt i oppgaven kjører, som vist i resultat.
+
+<details>
+    <summary>Detaljer</summary>
+
 Slik ser Docker-filen ut:
+
 ```
 # Stage 1: Bygg
 # Bruker Maven-bilde for å bygge applikasjonen
@@ -142,9 +158,12 @@ COPY --from=build /app/target/*.jar app.jar
 
 # Sett standard kommando for containeren
 CMD ["java", "-jar", "app.jar"]
-```
+```    
+</details>
 
-##Oppgave 2 - A - Resultat
+<details>
+    <summary>Resultat</summary>
+    
 Kjøring av "docker build -t ppe .":
 
 ![image](img/oppgave_2_a_1.png)
@@ -156,10 +175,11 @@ Kjøring av "docker run -p 8080:8080 -e AWS_ACCESS_KEY_ID=XXX -e AWS_SECRET_ACCE
 ![image](img/oppgave_2_a_3.png)
 
 Kjøring av "curl localhost:8080/scan-ppe?bucketName=kjellsimagebucket":
+
 ![image](img/oppgave_2_a_4.png)
+</details>
 
 ## Oppgave 2 - B
-
 For bygging i Github Actions trengs følgende secrets:
 - AWS_ACCESS_KEY_ID (Lages i IAM)
 - AWS_SECRET_ACCESS_KEY (Lages i IAM)
@@ -167,14 +187,19 @@ For bygging i Github Actions trengs følgende secrets:
 Det er også forhånds laget et Elastic Container Repository(ECR) med navn:
 [kandidat2033ecr](https://eu-west-1.console.aws.amazon.com/ecr/repositories/private/244530008913/kandidat2033ecr?region=eu-west-1)
 
-## Oppgave 2 - B - Resultat
+<details>
+    <summary>Resultat</summary>
+
 [Commit'en har id d14dcab544268b3192fbc74487474159d8d98691](https://github.com/sebastiannordby/DevopsPGR301Exam/commit/d14dcab544268b3192fbc74487474159d8d98691).
 
 Kjøring av workflow:
+
 ![image](img/oppgave_2_b_1.png)
 
 Publisert til ECR og tagget med "latest" og hash for commit:
+
 ![image](img/oppgave_2_b_2.png)
+</details>
 
 # Oppgave 3
 For bygging i Github Actions trengs følgende secrets:
@@ -182,6 +207,10 @@ For bygging i Github Actions trengs følgende secrets:
 - AWS_SECRET_ACCESS_KEY (Lages i IAM)
 
 ## Oppgave 3 - A
+
+<details>
+    <summary>Detaljer</summary>
+    
 Endte opp med å gjøre om fire hardkodet felter til variabler:
 
 ```
@@ -223,9 +252,13 @@ instance_configuration {
 }
 *****
 ```
+</details>
 
 ## Oppgave 3 - B:
 
+<details>
+    <summary>Detaljer</summary>
+    
 Lagt til en ny jobb i workflow "aws_deploy_ecr.yml":
 
 ```
@@ -282,6 +315,7 @@ env:
 ```
 
 Etter deploy dukket instansen opp i AppRunner:
+
 ![image](img/oppgave_3_b_2.png)
 
 Policien blir også opprettet:
@@ -292,14 +326,24 @@ Endte opp meg å legge til S3 Full Access med Terraform, dette er vel strengt ta
 du(Glenn) har laget en rolle(AppRunnerECRAccessRole) som implisitt allerede gjør dette:
 
 ![image](img/oppgave_3_b_4.png)
+</details>
 
-
-## Oppgave 3 - Resultat:
+<details>
+    <summary>Resultat</summary>
+    
+### Resultat
 Kjører en "curl" kommando mot AppRunner fra Cloud9-miljøet og resultatet blir(drumroll): 
 
 ![image](img/oppgave_3_resultat.png)
+</details>
 
-# Oppgave 4 A
+# Oppgave 4
+
+## Oppgave 4 A
+
+<details>
+    <summary>Detaljer</summary>
+
 For å gjøre oppsett av applikasjonen enklere, flyttet jeg Terraform variablene til egen fil ["variables.tf"](https://github.com/sebastiannordby/DevopsPGR301Exam/blob/main/infra/variables.tf).
 Jeg ville også ha mulighet til å konfigurere metrikkene via Github Actions som så sendte videre til Terraform.
 
@@ -362,22 +406,24 @@ Alle variablene kan og må da settes i steget "Terraform Apply":
       TF_VAR_cloudwatch_enabled: true
 *****
 ```
+</details>
 
-# Oppgave 4 - A - Resultat
+<details>
+    <summary>Resultat</summary>
 
 Introdusert tre nye endepunkter:
 
-listImages: Dette endepunktet tar inn navnet på en S3-bøtte som parameter og returnerer en liste over innholdet i den angitte bøtten. Den bruker Amazon S3-tjenesten til å liste opp objekter i bøtten og returnerer en liste med nøklene til objektene. Her valgte jeg Timer for samme grunn som "Endepunkt for å analysere bilder med kjennetegn"-
+listImages: Dette endepunktet tar inn navnet på en S3-bøtte som parameter og returnerer en liste over innholdet i den angitte bøtten. Den bruker Amazon S3-tjenesten til å liste opp objekter i bøtten og returnerer en liste med           nøklene til objektene. Her valgte jeg Timer for samme grunn som "Endepunkt for å analysere bilder med kjennetegn"-
 
 ![image](img/oppgave_4_a_1.png)
 
-downloadImage: Dette endepunktet tar inn navnet på en S3-bøtte og navnet på en bildefil i bøtten som parametere. Det bruker Amazon S3-tjenesten til å laste ned bildet fra bøtten og returnerer bildedataen som en HTTP-respons med riktig MIME-type. Her valgte jeg DistributionSummary som metrikk. Jeg mener dette er en god metrikk for det å laste ned filer fordi man kan få 
+downloadImage: Dette endepunktet tar inn navnet på en S3-bøtte og navnet på en bildefil i bøtten som parametere. Det bruker Amazon S3-tjenesten til å laste ned bildet fra bøtten og returnerer bildedataen som en HTTP-respons med         riktig MIME-type. Her valgte jeg DistributionSummary som metrikk. Jeg mener dette er en god metrikk for det å laste ned filer fordi man kan få 
 diverse statistikker som gjennomsnitt, maksimum, minimum av filstørrelsene. Ved å se på disse verdiene vet man da om man burde effektivisere koden, 
 kanskje streame over http i steden for å lese fra S3 og rett til minne, men også oppdage flaskehalser i forhold til filstørrelsene i forhold til ytelse på applikasjonen.
 
 ![image](img/oppgave_4_a_2.png)
 
-analyzeImagesFromBucket: Dette endepunktet tar inn navnet på en S3-bøtte som parameter og analyserer bildene i bøtten ved å bruke Amazon Rekognition-tjenesten til å oppdage og returnere etiketter som beskriver objekter i hvert bilde. Her valgte jeg Timer som metrikk rett og slett for å overvåke ytelse. Her kan man da sette opp varslinger hvis endepunktet skulle bruke 
+analyzeImagesFromBucket: Dette endepunktet tar inn navnet på en S3-bøtte som parameter og analyserer bildene i bøtten ved å bruke Amazon Rekognition-tjenesten til å oppdage og returnere etiketter som beskriver objekter i hvert          bilde. Her valgte jeg Timer som metrikk rett og slett for å overvåke ytelse. Her kan man da sette opp varslinger hvis endepunktet skulle bruke 
 for lang tid på å eksekvere. En til fordel er at man kan se når hastighetsforskjeller i forhold til mengden brukere(hvis du har dette som metrikk),
 men også generelt for å ha statestikk på ytelse av tredjeparts tjenester.
 
@@ -392,9 +438,15 @@ Kanskje endepunktet blir kjørt mange ganger og man skulle ha cashet resultatene
 Et fungerende dashboard med navn "kandidat2033dashboard":
 
 ![image](img/oppgave_4_a_resultat.png)
+    
+</details>
 
 
-# Oppave 4 - B
+## Oppave 4 - B
+
+<details>
+    <summary>Detaljer</summary>
+
 Definert en alarm under infra/alarm_module. 
 Alarmen skal gå av hvis scan-ppe blir kalt mer enn 5 ganger innen en tidsperiode på 1 minutt.
 
@@ -459,14 +511,20 @@ module "alarm" {
   threshold = 5
   cloudwatch_namespace = var.cloudwatch_namespace
 }
-```
+```    
+</details>
 
-## Oppgave 4 - B - Resultat
+<details>
+    <summary>Resultat</summary>
+    
 Alarmen kommer opp i CloudWatch:
+
 ![image](img/oppgave_4_resultat_b_1.png)
 
 Mottar e-post for abonnering på alarm:
+
 ![image](img/oppgave_4_resultat_b_2.png)
+</details>
 
 # Oppgave 5
 
@@ -531,6 +589,7 @@ Selvom det er noen humper i veien er det også en del styrker, f.eks.:
 - Tilfredshet: Raskere og oftere levering av funksjoner til kunden kan føre til at de kommer raskere i gang med å bruke produktet som kan føre til økt produktivitet hos kunden
 - Effektivitet og produktivitet: Ettersom teamet selv er ansvarlig for planlegging, gjennomføring og evaluering kan dette bidra til økt produktivitet, som også som regel kommer med økt effektivitet
 
+
 **DevOps Metodikk**
 De grunnleggende prinsippene i DevOps er: *flyt, feedback og kontinuerlig forbedring*.
 
@@ -550,7 +609,6 @@ Kontinuerlig forbedring er et tredje viktig prinsipp i DevOps. Kontinuerlig forb
 - Scrum: Scrum er et rammeverk for smidig utvikling som fokuserer på kontinuerlig forbedring
 - Kaizen: Kaizen er en japansk filosofi for kontinuerlig forbedring
 - Lean: Lean er et rammeverk for å forbedre effektiviteten og kvaliteten
-
 
 Selvom DevOps metodikk kommer med sine fordeler, kan det også ha sine ulemper og utfordringer. 
 
@@ -576,7 +634,9 @@ Kostnader: Implementering av DevOps kan medføre investeringer i infrastruktur o
 
 Feilsøking og feilretting: I en kompleks DevOps-miljø kan feilsøking og feilretting være utfordrende. Å finne kilden til problemer kan være tidkrevende og kreve spesialisert kompetanse. Man må da sørge for at flere besitter denne kompetansen hvis feil skulle oppstå.
 
+
 **Sammenligning og Kontrast**
+
 *Scrum/Smidig*:
 
 - Programvarekvalitet: Scrum/Smidig fremmer iterativ utvikling og tett samarbeid med kunder og andre parter av interesse. Dette kan føre til bedre forståelse av krav og rask tilbakemelding, som bidrar til å forbedre programvarekvaliteten over tid. Automatisert testing og kontinuerlig integrasjon (CI) er også vanlige i Smidig-utvikling, noe som styrker kvalitetskontrollen på programvaren
