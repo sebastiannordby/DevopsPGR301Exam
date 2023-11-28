@@ -4,12 +4,18 @@
 [![Build and Push to AWS ECR](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml)
 
 ## Konfigurering av Github
-**For alle oppgavene i dette prosjektet må følgende secrets legges inn i Github:**
+Har valgt å legge inn denne seksjonen i stedenfor å repetere det i hver individuell oppgave.
+
+**For ALLE oppgavene i dette prosjektet må følgende secrets legges inn i Github:**
 - AWS_ACCESS_KEY_ID (Lages i IAM)
 - AWS_SECRET_ACCESS_KEY (Lages i IAM)
 
+## Konfigurering av Python
+- Navn på bøtte kan endres i [/kjell/template.yml](https://github.com/sebastiannordby/DevopsPGR301Exam/blob/main/kjell/template.yml)
+- Annen konfigurering i forhold til stack osv, kan endres i [/.github/workflows/aws_sam_python.yml](https://github.com/sebastiannordby/DevopsPGR301Exam/blob/main/.github/workflows/aws_sam_python.yml)
+
 ## Konfigurering av Java applikasjonen
-**Resten av konfigureringen i forhold til applikasjonen for Java applikasjonen kan gjøres i "aws_deploy_ecr.yml",
+**Resten av konfigureringen i forhold til applikasjonen for Java applikasjonen kan gjøres i [/.github/workflows/aws_deploy_ecr.yml](https://github.com/sebastiannordby/DevopsPGR301Exam/blob/main/.github/workflows/aws_deploy_ecr.yml),
 under steget "Terraform Apply" ved bruk av Github Actions:**
 ```
 ******
@@ -36,10 +42,6 @@ TF_VAR_alert_email: sebastianbjornstad@hotmail.com
 
 <details>
     <summary>Detaljer</summary>
-
-Følgende secrets må være konfigurert for å kjøre workflow:
-- AWS_ACCESS_KEY_ID (Lages i IAM)
-- AWS_SECRET_ACCESS_KEY (Lages i IAM)
 
 Gjort om hardkodet BUCKET_NAME variabel til å hente ifra miljøvariabler:
 
@@ -180,11 +182,7 @@ Kjøring av "curl localhost:8080/scan-ppe?bucketName=kjellsimagebucket":
 </details>
 
 ## Oppgave 2 - B
-For bygging i Github Actions trengs følgende secrets:
-- AWS_ACCESS_KEY_ID (Lages i IAM)
-- AWS_SECRET_ACCESS_KEY (Lages i IAM)
-
-Det er også forhånds laget et Elastic Container Repository(ECR) med navn:
+Det er forhåndslaget et Elastic Container Repository(ECR) med navn:
 [kandidat2033ecr](https://eu-west-1.console.aws.amazon.com/ecr/repositories/private/244530008913/kandidat2033ecr?region=eu-west-1)
 
 <details>
@@ -202,9 +200,6 @@ Publisert til ECR og tagget med "latest" og hash for commit:
 </details>
 
 # Oppgave 3
-For bygging i Github Actions trengs følgende secrets:
-- AWS_ACCESS_KEY_ID (Lages i IAM)
-- AWS_SECRET_ACCESS_KEY (Lages i IAM)
 
 ## Oppgave 3 - A
 
