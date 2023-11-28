@@ -3,6 +3,8 @@
 [![Publish Python AWS SAM](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_sam_python.yml)
 [![Build and Push to AWS ECR](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml/badge.svg)](https://github.com/sebastiannordby/DevopsPGR301Exam/actions/workflows/aws_deploy_ecr.yml)
 
+**Oppgave4. Drøfeoppgaver er listet opp som Oppgave 5 i besvarelsen for å separere kode og tekst besvarelser.**
+
 ## Konfigurering av Github
 Har valgt å legge inn denne seksjonen i stedenfor å repetere det i hver individuell oppgave.
 
