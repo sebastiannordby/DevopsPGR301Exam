@@ -185,6 +185,8 @@ Kjøring av "curl localhost:8080/scan-ppe?bucketName=kjellsimagebucket":
 Det er forhåndslaget et Elastic Container Repository(ECR) med navn:
 [kandidat2033ecr](https://eu-west-1.console.aws.amazon.com/ecr/repositories/private/244530008913/kandidat2033ecr?region=eu-west-1)
 
+Hvis det er ønskelig å bytte navn på ECR som lages må dette også gjøres om i [/.github/workflows/aws_deploy_ecr.yml](https://github.com/sebastiannordby/DevopsPGR301Exam/blob/main/.github/workflows/aws_deploy_ecr.yml) under jobben "build-and-push-ecr", også må det sørges for at det samme repositoriet(ECR) blir brukt til Terraform i senere oppgaver.
+
 <details>
     <summary>Resultat</summary>
 
